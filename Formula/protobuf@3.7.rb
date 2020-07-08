@@ -15,10 +15,13 @@ class ProtobufAT37 < Formula
 
   keg_only :versioned_formula
 
+  # https://github.com/Homebrew/homebrew-core/pull/54471#issuecomment-627430555
+  disable!
+
   depends_on "autoconf" => :build
   depends_on "automake" => :build
   depends_on "libtool" => :build
-  depends_on "python" => [:build, :test]
+  depends_on "python@3.7" => [:build, :test]
 
   resource "six" do
     url "https://files.pythonhosted.org/packages/dd/bf/4138e7bfb757de47d1f4b6994648ec67a51efe58fa907c1e11e350cddfca/six-1.12.0.tar.gz"
@@ -40,7 +43,8 @@ class ProtobufAT37 < Formula
     system "make", "install"
 
     # Install editor support and examples
-    doc.install "editors", "examples"
+    pkgshare.install "editors/proto.vim", "examples"
+    elisp.install "editors/protobuf-mode.el"
 
     ENV.append_to_cflags "-I#{include}"
     ENV.append_to_cflags "-L#{lib}"

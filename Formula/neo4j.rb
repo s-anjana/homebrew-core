@@ -1,8 +1,8 @@
 class Neo4j < Formula
   desc "Robust (fully ACID) transactional property graph database"
   homepage "https://neo4j.com/"
-  url "https://neo4j.com/artifact.php?name=neo4j-community-3.5.14-unix.tar.gz"
-  sha256 "fb435b11494cde475f748f057a192bcbd8580c7445b380afe9ff52311f334bfe"
+  url "https://neo4j.com/artifact.php?name=neo4j-community-4.1.0-unix.tar.gz"
+  sha256 "b598edeb3401e5ec40fb7bc3370307addfcaa21565f731016c9c7f8e70af659a"
 
   bottle :unneeded
 
@@ -11,6 +11,8 @@ class Neo4j < Formula
   # https://github.com/neo4j/neo4j/issues/11728#issuecomment-387038804
   # https://github.com/neo4j/neo4j-browser/issues/671#issuecomment-346224754
   # https://github.com/Homebrew/homebrew-core/issues/31090
+  # As of v4.1.0, neo4j still needs to build with java 1.8
+  # https://github.com/neo4j/neo4j/issues/12516
   depends_on :java => "1.8"
 
   def install

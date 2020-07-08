@@ -1,8 +1,8 @@
 class Gradle < Formula
   desc "Open-source build automation tool based on the Groovy and Kotlin DSL"
   homepage "https://www.gradle.org/"
-  url "https://services.gradle.org/distributions/gradle-6.2.2-all.zip"
-  sha256 "838fa0e3373a9c8d953eff972449edc6be5fa12b26509ac3387727de85138cc0"
+  url "https://services.gradle.org/distributions/gradle-6.5.1-all.zip"
+  sha256 "143a28f54f1ae93ef4f72d862dbc3c438050d81bb45b4601eb7076e998362920"
 
   bottle :unneeded
 
@@ -17,5 +17,11 @@ class Gradle < Formula
 
   test do
     assert_match version.to_s, shell_output("#{bin}/gradle --version")
+
+    (testpath/"build.gradle").write <<~EOS
+      println "gradle works!"
+    EOS
+    gradle_output = shell_output("#{bin}/gradle build --no-daemon")
+    assert_includes gradle_output, "gradle works!"
   end
 end

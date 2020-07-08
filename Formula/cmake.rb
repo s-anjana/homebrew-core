@@ -1,18 +1,40 @@
 class Cmake < Formula
   desc "Cross-platform make"
   homepage "https://www.cmake.org/"
-  url "https://github.com/Kitware/CMake/releases/download/v3.16.5/cmake-3.16.5.tar.gz"
-  sha256 "5f760b50b8ecc9c0c37135fae5fbf00a2fef617059aa9d61c1bb91653e5a8bfc"
   head "https://gitlab.kitware.com/cmake/cmake.git"
+
+  stable do
+    url "https://github.com/Kitware/CMake/releases/download/v3.17.3/cmake-3.17.3.tar.gz"
+    sha256 "0bd60d512275dc9f6ef2a2865426a184642ceb3761794e6b65bff233b91d8c40"
+
+    # Allows CMAKE_FIND_FRAMEWORKS to work with CMAKE_FRAMEWORK_PATH, which brew sets.
+    # Remove with 3.18.0.
+    patch do
+      url "https://gitlab.kitware.com/cmake/cmake/-/commit/c841d43d70036830c9fe16a6dbf1f28acf49d7e3.diff"
+      sha256 "87de737abaf5f8c071abc4a4ae2e9cccced6a9780f4066b32ce08a9bc5d8edd5"
+    end
+
+    # Adds macOS 11.0 compatibility.
+    # Remove with 3.18.0.
+    patch do
+      url "https://gitlab.kitware.com/cmake/cmake/-/commit/a0c4c27443afe1c423c08063e2eaf96ffa2f54fb.diff"
+      sha256 "7b84bc0dbb71c620939fb1e354f671e1d0007c9c8060ed3f2afe54a11f5e578c"
+    end
+  end
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "96f40b538d48f62df61a68353bcd8303f0e9a97e19e9557790701e8e52e7c0b2" => :catalina
-    sha256 "b44b7a3e594321bd9492a89ae985390389a35b9e67868bb8c1541401901e26d8" => :mojave
-    sha256 "bb4d0aaea67e5b4d8eeaeadc109ff200ab94b94442d986c86884987404c036ed" => :high_sierra
+    rebuild 1
+    sha256 "8546864336108d217502a797033a72568b0325bf739495dff49c39d7f429fd07" => :catalina
+    sha256 "a4e96287fc974242d6399ba2e3e040cfc99e7c1f574873e95491c88244744306" => :mojave
+    sha256 "32321684bf5d7d4270db1a6c8fe2bb4c5f18e4a3a00fc7b3c628939c842301ff" => :high_sierra
   end
 
   depends_on "sphinx-doc" => :build
+
+  on_linux do
+    depends_on "openssl@1.1"
+  end
 
   # The completions were removed because of problems with system bash
 
@@ -40,7 +62,7 @@ class Cmake < Formula
     # See https://bugs.python.org/issue18378#msg215215 for explanation
     ENV["LC_ALL"] = "en_US.UTF-8"
 
-    system "./bootstrap", *args, "--", "-DCMAKE_BUILD_TYPE=Release"
+    system "./bootstrap", *args, "--", *std_cmake_args
     system "make"
     system "make", "install"
 

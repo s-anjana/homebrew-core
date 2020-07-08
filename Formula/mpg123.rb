@@ -1,16 +1,19 @@
 class Mpg123 < Formula
   desc "MP3 player for Linux and UNIX"
   homepage "https://www.mpg123.de/"
-  url "https://downloads.sourceforge.net/project/mpg123/mpg123/1.25.13/mpg123-1.25.13.tar.bz2"
-  sha256 "90306848359c793fd43b9906e52201df18775742dc3c81c06ab67a806509890a"
+  url "https://downloads.sourceforge.net/project/mpg123/mpg123/1.26.2/mpg123-1.26.2.tar.bz2"
+  sha256 "00f7bf7ea64fcec2c9d07751d6ad8849343ee09c282ea3b0d5dd486e886e2ff3"
 
   bottle do
-    sha256 "231bff62192a6c109c7eeafd4deb90b967197f0656a5aa6ff23360540b2ea3e2" => :catalina
-    sha256 "853131e5b67225d5018b5574c9073dafee53d7fd8b326f164bad02b835ceee92" => :mojave
-    sha256 "fc7974c5e52d1c85e0345e359371fc7b1b2b102e2b2b4b4107a5a761ce06c5f4" => :high_sierra
+    sha256 "29e4e2b5e306f94d2ce0e900f8413b4751f5df28488a476558527119b09bf015" => :catalina
+    sha256 "9e80680b18a8b2e000d32aee02c5b5b03e95d617119d1a922a1ac48da4df66f6" => :mojave
+    sha256 "6a9d7414515325f52473be05e484faa1c314ffb65582588d9c312400d3e9d6bd" => :high_sierra
   end
 
   def install
+    # Work around Xcode 11 clang bug
+    ENV.append_to_cflags "-fno-stack-check" if DevelopmentTools.clang_build_version >= 1010
+
     args = %W[
       --disable-debug
       --disable-dependency-tracking

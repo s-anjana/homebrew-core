@@ -2,19 +2,29 @@ class BoostPython3 < Formula
   desc "C++ library for C++/Python3 interoperability"
   homepage "https://www.boost.org/"
   url "https://dl.bintray.com/boostorg/release/1.72.0/source/boost_1_72_0.tar.bz2"
+  mirror "https://dl.bintray.com/homebrew/mirror/boost_1_72_0.tar.bz2"
   sha256 "59c9b274bc451cf91a9ba1dd2c7fdcaf5d60b1b3aa83f2c9fa143417cc660722"
+  license "BSL-1.0"
+  revision 1
   head "https://github.com/boostorg/boost.git"
 
   bottle do
     cellar :any
-    sha256 "ce20b29ffbf51137476d5bce459731fd2eb9bd0f5a3a9b1758a6c2cb52b0826d" => :catalina
-    sha256 "a89c855389dba45e976613c0a818d5a1d9042f5627c27a57d825136538f95543" => :mojave
-    sha256 "ff1323cf64f2604a274486bc822bf5790f8e8eaac6b2e44e5bdabda3ecb8c661" => :high_sierra
+    sha256 "dbb68300aafb7dc618ed08e91ba34d07e8d2e80a28988a68ebb9fccba4e0e11e" => :catalina
+    sha256 "3c02bc31d2de7b3df8379ee24f70b9740c9fcd07f0d7ea5fcbf8de59be9edb1e" => :mojave
+    sha256 "ba57a38cc8bd70c95bc62b0c41dea57a931fbf4ee1b3601e4406f8f537129006" => :high_sierra
   end
 
   depends_on "numpy" => :build
   depends_on "boost"
-  depends_on "python"
+  depends_on "python@3.8"
+
+  # Fix build on Xcode 11.4
+  patch do
+    url "https://github.com/boostorg/build/commit/b3a59d265929a213f02a451bb63cea75d668a4d9.patch?full_index=1"
+    sha256 "04a4df38ed9c5a4346fbb50ae4ccc948a1440328beac03cb3586c8e2e241be08"
+    directory "tools/build"
+  end
 
   def install
     # "layout" should be synchronized with boost
@@ -38,15 +48,15 @@ class BoostPython3 < Formula
     # user-config.jam below.
     inreplace "bootstrap.sh", "using python", "#using python"
 
-    pyver = Language::Python.major_minor_version "python3"
-    py_prefix = Formula["python3"].opt_frameworks/"Python.framework/Versions/#{pyver}"
+    pyver = Language::Python.major_minor_version Formula["python@3.8"].opt_bin/"python3"
+    py_prefix = Formula["python@3.8"].opt_frameworks/"Python.framework/Versions/#{pyver}"
 
     # Force boost to compile with the desired compiler
     (buildpath/"user-config.jam").write <<~EOS
       using darwin : : #{ENV.cxx} ;
       using python : #{pyver}
                    : python3
-                   : #{py_prefix}/include/python#{pyver}m
+                   : #{py_prefix}/include/python#{pyver}
                    : #{py_prefix}/lib ;
     EOS
 
@@ -79,9 +89,9 @@ class BoostPython3 < Formula
       }
     EOS
 
-    pyincludes = Utils.popen_read("python3-config --includes").chomp.split(" ")
-    pylib = Utils.popen_read("python3-config --ldflags").chomp.split(" ")
-    pyver = Language::Python.major_minor_version("python3").to_s.delete(".")
+    pyincludes = shell_output("#{Formula["python@3.8"].opt_bin}/python3-config --includes").chomp.split(" ")
+    pylib = shell_output("#{Formula["python@3.8"].opt_bin}/python3-config --ldflags --embed").chomp.split(" ")
+    pyver = Language::Python.major_minor_version(Formula["python@3.8"].opt_bin/"python3").to_s.delete(".")
 
     system ENV.cxx, "-shared", "hello.cpp", "-L#{lib}", "-lboost_python#{pyver}", "-o",
            "hello.so", *pyincludes, *pylib
@@ -90,6 +100,6 @@ class BoostPython3 < Formula
       import hello
       print(hello.greet())
     EOS
-    assert_match "Hello, world!", pipe_output("python3", output, 0)
+    assert_match "Hello, world!", pipe_output(Formula["python@3.8"].opt_bin/"python3", output, 0)
   end
 end

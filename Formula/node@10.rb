@@ -1,22 +1,22 @@
 class NodeAT10 < Formula
   desc "Platform built on V8 to build network applications"
   homepage "https://nodejs.org/"
-  url "https://nodejs.org/dist/v10.19.0/node-v10.19.0.tar.gz"
-  sha256 "db85b9992f1ec66629731d82f690987883dd2989abb4cc136eb65dd720b1bda8"
+  url "https://nodejs.org/dist/v10.21.0/node-v10.21.0.tar.xz"
+  sha256 "26b01fa28338cacaa8a66d7963ab2514e81678c268ab52ec55dcf937aadcb73b"
 
   bottle do
     cellar :any
-    sha256 "2340eeada3e44d29f118f7d7381f6c1bc1c6c58dbf246cff7d83a88346f2d93f" => :catalina
-    sha256 "021c43ebaa85ac1d763fa453e98b5f9bfff750b032fdc2b627f545fcd18247a1" => :mojave
-    sha256 "80138dde9c1c0b7f1b0dfb6ce7c209d7dac07f4dae37d2b2e398f6018ae3c56f" => :high_sierra
+    sha256 "aced8e64c7f31ee9c816eee1c8a3bf2107a4973c82c6d95f5d7e4de50d806e63" => :catalina
+    sha256 "11f1d58110562399626b05aff0f116b037f4c2c83002a8778d850bf63c5ad235" => :mojave
+    sha256 "732c01d9c17a076ae5da0fd8772fa59cd8928576cf04ced3b70055fa48c2ffa0" => :high_sierra
   end
 
   keg_only :versioned_formula
 
   depends_on "pkg-config" => :build
   depends_on "icu4c"
-  # Will not work with Python 3 without extensive patching. Node 10 will be EOL April 2021
-  uses_from_macos "python@2" => :build
+  depends_on :macos # Due to Python 2 (Will not work with Python 3 without extensive patching)
+  # Node 10 will be EOL April 2021
 
   def install
     system "./configure", "--prefix=#{prefix}", "--with-intl=system-icu"

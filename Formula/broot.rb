@@ -1,15 +1,16 @@
 class Broot < Formula
   desc "New way to see and navigate directory trees"
   homepage "https://dystroy.org/broot"
-  url "https://github.com/Canop/broot/archive/v0.13.4.tar.gz"
-  sha256 "fd9af3df87f61dbce01c262c71d07cd11221602da7662c321501772eb9a68fff"
+  url "https://github.com/Canop/broot/archive/v0.18.5.tar.gz"
+  sha256 "ec63f8223dcf7039cc9921ee9cc4a5b3196abb8df2b25a9c3dad3307db662770"
+  license "MIT"
   head "https://github.com/Canop/broot.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "021434c2352da97a183a70dbdf82ccca86eb46f552d8ec5dc1a127c95f1ae01f" => :catalina
-    sha256 "f8565c22874e3afb0c525ff101939f5c03696f972710e8f3f81f003216a923ea" => :mojave
-    sha256 "1d029f5e322b1516ecda366e1265a5e86a4088400cc94ea506097690db95abf4" => :high_sierra
+    sha256 "cb5654980ae7ebb65d316f4575b5c6cfe2b772f2761314f242d83a626b71ea94" => :catalina
+    sha256 "036afbc552a76e9139cc9adbfe5033aa869e6e2a2ac417a5add1afdcb60f3118" => :mojave
+    sha256 "9eceac344c308c1ce36d880cd8a78f7bda0a837679719de16d34a48e5ec60655" => :high_sierra
   end
 
   depends_on "rust" => :build
@@ -17,13 +18,11 @@ class Broot < Formula
   uses_from_macos "zlib"
 
   def install
-    system "cargo", "install", "--locked", "--root", prefix, "--path", "."
+    system "cargo", "install", *std_cargo_args
   end
 
   test do
-    assert_match version.to_s, shell_output("#{bin}/broot --version")
-
-    assert_match "BFS", shell_output("#{bin}/broot --help 2>&1")
+    assert_match "A tree explorer and a customizable launcher", shell_output("#{bin}/broot --help 2>&1")
 
     require "pty"
     require "io/console"

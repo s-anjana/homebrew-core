@@ -2,13 +2,15 @@ class Php < Formula
   desc "General-purpose scripting language"
   homepage "https://www.php.net/"
   # Should only be updated if the new version is announced on the homepage, https://www.php.net/
-  url "https://www.php.net/distributions/php-7.4.3.tar.xz"
-  sha256 "cf1f856d877c268124ded1ede40c9fb6142b125fdaafdc54f855120b8bc6982a"
+  url "https://www.php.net/distributions/php-7.4.7.tar.xz"
+  mirror "https://fossies.org/linux/www/php-7.4.7.tar.xz"
+  sha256 "53558f8f24cd8ab6fa0ea252ca8198e2650160649681ce5230c1df1dc2b52faf"
 
   bottle do
-    sha256 "9370af1b117049783f81968fc800d1710224581cb8d9f396c38d9eef8aedf3ac" => :catalina
-    sha256 "364332e23b489c53fe9efddc881bd9fa8366df5ea66f9e69c9c843d6ec64518d" => :mojave
-    sha256 "c0c2fa82be5609534d3fdf875515e0d98ea17ed4de4f27aece8e275c840e889b" => :high_sierra
+    rebuild 1
+    sha256 "b71beb1e3270aa038da084e4c49cd2dc79a1f0e9e10e45eb0a0279874fc3c956" => :catalina
+    sha256 "f0a7264d9be901f47af300b75c914d4958898e5ca281c52e01a1065f8ee7ecac" => :mojave
+    sha256 "f5c18b09a7980926478503134ec200399fc65b290427130d52f7d680da66105c" => :high_sierra
   end
 
   head do
@@ -48,10 +50,10 @@ class Php < Formula
 
   uses_from_macos "xz" => :build
   uses_from_macos "bzip2"
+  uses_from_macos "krb5"
   uses_from_macos "libedit"
   uses_from_macos "libxml2"
   uses_from_macos "libxslt"
-  uses_from_macos "krb5"
   uses_from_macos "zlib"
 
   # PHP build system incorrectly links system libraries
@@ -183,17 +185,18 @@ class Php < Formula
     system "make", "install"
 
     # Allow pecl to install outside of Cellar
-    extension_dir = Utils.popen_read("#{bin}/php-config --extension-dir").chomp
+    extension_dir = Utils.safe_popen_read("#{bin}/php-config", "--extension-dir").chomp
     orig_ext_dir = File.basename(extension_dir)
     inreplace bin/"php-config", lib/"php", prefix/"pecl"
     inreplace "php.ini-development", %r{; ?extension_dir = "\./"},
       "extension_dir = \"#{HOMEBREW_PREFIX}/lib/php/pecl/#{orig_ext_dir}\""
 
     # Use OpenSSL cert bundle
+    openssl = Formula["openssl@1.1"]
     inreplace "php.ini-development", /; ?openssl\.cafile=/,
-      "openssl.cafile = \"#{etc}/openssl@1.1/cert.pem\""
+      "openssl.cafile = \"#{openssl.pkgetc}/cert.pem\""
     inreplace "php.ini-development", /; ?openssl\.capath=/,
-      "openssl.capath = \"#{etc}/openssl@1.1/certs\""
+      "openssl.capath = \"#{openssl.pkgetc}/certs\""
 
     config_files = {
       "php.ini-development"   => "php.ini",
@@ -234,7 +237,7 @@ class Php < Formula
     # Custom location for extensions installed via pecl
     pecl_path = HOMEBREW_PREFIX/"lib/php/pecl"
     ln_s pecl_path, prefix/"pecl" unless (prefix/"pecl").exist?
-    extension_dir = Utils.popen_read("#{bin}/php-config --extension-dir").chomp
+    extension_dir = Utils.safe_popen_read("#{bin}/php-config", "--extension-dir").chomp
     php_basename = File.basename(extension_dir)
     php_ext_dir = opt_prefix/"lib/php"/php_basename
 
@@ -340,14 +343,8 @@ class Php < Formula
     assert_no_match /^snmp$/, shell_output("#{bin}/php -m"),
       "SNMP extension doesn't work reliably with Homebrew on High Sierra"
     begin
-      require "socket"
-
-      server = TCPServer.new(0)
-      port = server.addr[1]
-      server_fpm = TCPServer.new(0)
-      port_fpm = server_fpm.addr[1]
-      server.close
-      server_fpm.close
+      port = free_port
+      port_fpm = free_port
 
       expected_output = /^Hello world!$/
       (testpath/"index.php").write <<~EOS

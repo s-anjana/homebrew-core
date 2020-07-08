@@ -8,6 +8,8 @@ class ElasticsearchAT56 < Formula
 
   keg_only :versioned_formula
 
+  deprecate! :date => "2019-03-11"
+
   depends_on :java => "1.8"
 
   def cluster_name
@@ -25,7 +27,7 @@ class ElasticsearchAT56 < Formula
     # Set up Elasticsearch for local development:
     inreplace "#{libexec}/config/elasticsearch.yml" do |s|
       # 1. Give the cluster a unique name
-      s.gsub!(/#\s*cluster\.name\: .*/, "cluster.name: #{cluster_name}")
+      s.gsub!(/#\s*cluster\.name: .*/, "cluster.name: #{cluster_name}")
 
       # 2. Configure paths
       s.sub!(%r{#\s*path\.data: /path/to.+$}, "path.data: #{var}/elasticsearch/")
@@ -34,7 +36,7 @@ class ElasticsearchAT56 < Formula
 
     inreplace "#{libexec}/bin/elasticsearch.in.sh" do |s|
       # Configure ES_HOME
-      s.sub!(%r{#\!/bin/bash\n}, "#!/bin/bash\n\nES_HOME=#{libexec}")
+      s.sub!(%r{#!/bin/bash\n}, "#!/bin/bash\n\nES_HOME=#{libexec}")
     end
 
     inreplace "#{libexec}/bin/elasticsearch-plugin" do |s|
@@ -65,15 +67,13 @@ class ElasticsearchAT56 < Formula
   end
 
   def caveats
-    s = <<~EOS
+    <<~EOS
       Data:    #{var}/elasticsearch/#{cluster_name}/
       Logs:    #{var}/log/elasticsearch/#{cluster_name}.log
       Plugins: #{libexec}/plugins/
       Config:  #{etc}/elasticsearch/
       plugin script: #{libexec}/bin/elasticsearch-plugin
     EOS
-
-    s
   end
 
   plist_options :manual => "#{HOMEBREW_PREFIX}/opt/elasticsearch@5.6/bin/elasticsearch"

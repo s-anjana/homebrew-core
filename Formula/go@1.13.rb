@@ -1,14 +1,15 @@
 class GoAT113 < Formula
   desc "Go programming environment (1.13)"
   homepage "https://golang.org"
-  url "https://dl.google.com/go/go1.13.8.src.tar.gz"
-  mirror "https://fossies.org/linux/misc/go1.13.8.src.tar.gz"
-  sha256 "b13bf04633d4d8cf53226ebeaace8d4d2fd07ae6fa676d0844a688339debec34"
+  url "https://dl.google.com/go/go1.13.12.src.tar.gz"
+  mirror "https://fossies.org/linux/misc/go1.13.12.src.tar.gz"
+  sha256 "17ba2c4de4d78793a21cc659d9907f4356cd9c8de8b7d0899cdedcef712eba34"
+  license "BSD-3-Clause"
 
   bottle do
-    sha256 "647f72f84425166b67839eb251402c870e5448a9d6c04ef9210d198c8813a0e5" => :catalina
-    sha256 "0f5f5cdeef29173a7152c250bc55a81693a097434fd0454a59b61e70bd47ce84" => :mojave
-    sha256 "cfa1d0e7b34a96f2f184ee56f58079c724a996830aec5df329eae8c3e94a14e6" => :high_sierra
+    sha256 "1e2aff4b727a0dec15ecdc2d97c1aa8e77fff21ad07a800917c80371b3812243" => :catalina
+    sha256 "41e5aee4bc93775ee229b79330e80bf14d50825f5f48f4cdb0cfe8bcccc5b5f0" => :mojave
+    sha256 "1f0c88622d5c804013c3e80cdc5fd482f28fcc8df3a7e7f4069d0035e35853c5" => :high_sierra
   end
 
   keg_only :versioned_formula
@@ -22,8 +23,15 @@ class GoAT113 < Formula
 
   # Don't update this unless this version cannot bootstrap the new version.
   resource "gobootstrap" do
-    url "https://storage.googleapis.com/golang/go1.7.darwin-amd64.tar.gz"
-    sha256 "51d905e0b43b3d0ed41aaf23e19001ab4bc3f96c3ca134b48f7892485fc52961"
+    on_macos do
+      url "https://storage.googleapis.com/golang/go1.7.darwin-amd64.tar.gz"
+      sha256 "51d905e0b43b3d0ed41aaf23e19001ab4bc3f96c3ca134b48f7892485fc52961"
+    end
+
+    on_linux do
+      url "https://storage.googleapis.com/golang/go1.7.linux-amd64.tar.gz"
+      sha256 "702ad90f705365227e902b42d91dd1a40e48ca7f67a2f4b2fd052aaa4295cd95"
+    end
   end
 
   def install

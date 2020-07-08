@@ -2,14 +2,16 @@ class Pulumi < Formula
   desc "Cloud native development platform"
   homepage "https://pulumi.io/"
   url "https://github.com/pulumi/pulumi.git",
-      :tag      => "v1.12.1",
-      :revision => "cbd5f862c3a6e47847471f8b1ca145a0f916eb2c"
+      :tag      => "v2.5.0",
+      :revision => "ad721d3b5421b2a7b10a0dfdd8abae8cf4b80e69"
+  license "Apache-2.0"
+  head "https://github.com/pulumi/pulumi.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "84d921f3f5157ed91ca5617a682039318d9cd4b34779babdb6376c28718e1849" => :catalina
-    sha256 "1289a590897678ffae7944525c615f0dcfac5984e681f7d0a92ca3fce6534843" => :mojave
-    sha256 "618fb273167bd7ade71de6b98ddf68c595e1e35c8dd8d0815a3fff11ee8fbb29" => :high_sierra
+    sha256 "f7cc20c0135e0bf40c372f63e1aca9a313e5409a334c6e04862d7811eac0f223" => :catalina
+    sha256 "9f789bdef38e8099178635d7a4cc89e7f294e0c256a04620b97f768458fd06b3" => :mojave
+    sha256 "68ac096ceb7024c6dcbe2523b97475e0ae2587df5a7c2ed14d66da512b8c13f2" => :high_sierra
   end
 
   depends_on "go" => :build
@@ -22,18 +24,20 @@ class Pulumi < Formula
     dir.install buildpath.children
 
     cd dir do
-      system "go", "mod", "vendor"
-      system "make", "dist"
+      cd "./sdk" do
+        system "go", "mod", "download"
+      end
+      cd "./pkg" do
+        system "go", "mod", "download"
+      end
+      system "make", "brew"
       bin.install Dir["#{buildpath}/bin/*"]
       prefix.install_metafiles
 
-      # Install bash completion
-      output = Utils.popen_read("#{bin}/pulumi gen-completion bash")
-      (bash_completion/"pulumi").write output
-
-      # Install zsh completion
-      output = Utils.popen_read("#{bin}/pulumi gen-completion zsh")
-      (zsh_completion/"_pulumi").write output
+      # Install shell completions
+      (bash_completion/"pulumi.bash").write `#{bin}/pulumi gen-completion bash`
+      (zsh_completion/"_pulumi").write `#{bin}/pulumi gen-completion zsh`
+      (fish_completion/"pulumi.fish").write `#{bin}/pulumi gen-completion fish`
     end
   end
 

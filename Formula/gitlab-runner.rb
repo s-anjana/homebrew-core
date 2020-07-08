@@ -2,27 +2,27 @@ class GitlabRunner < Formula
   desc "The official GitLab CI runner written in Go"
   homepage "https://gitlab.com/gitlab-org/gitlab-runner"
   url "https://gitlab.com/gitlab-org/gitlab-runner.git",
-      :tag      => "v12.8.0",
-      :revision => "1b659122341969efcf635cc4f9c33b73ca2ee09c"
+      :tag      => "v13.1.1",
+      :revision => "6fbc747426d91528fcc5a7a3b47b2ef3e430bd3a"
+  license "MIT"
   head "https://gitlab.com/gitlab-org/gitlab-runner.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "efec28fbc2f384b57edb8dfa1472b12b780129dc84cb0302d185d84829b9206e" => :catalina
-    sha256 "263b5f06e4fe9d9eb2a4f3b0da26e0b035ffdc5c94fbcc8ffbdc33d0e74ff6d8" => :mojave
-    sha256 "f0a2dfd91223cc1b8fbd1f74c32f16a5b84a87311cf9cf22d196bbeb8f1d03d8" => :high_sierra
+    sha256 "3a91a0ef04cf878b0e98d0897ce58888b3872e4844f820adc7dfcfa9204653a0" => :catalina
+    sha256 "c30a9bff71c9148659bc9893231782aeb10e33b7c368e00325032dbaa8027cec" => :mojave
+    sha256 "7395fd0fc8f8344bf51a4a0bc78374f8e4131a98c5fd3308674cfddcac40ea8a" => :high_sierra
   end
 
   depends_on "go" => :build
 
   def install
-    ENV["GOPATH"] = buildpath
     dir = buildpath/"src/gitlab.com/gitlab-org/gitlab-runner"
     dir.install buildpath.children
 
     cd dir do
       proj = "gitlab.com/gitlab-org/gitlab-runner"
-      commit = Utils.popen_read("git", "rev-parse", "--short=8", "HEAD").chomp
+      commit = Utils.safe_popen_read("git", "rev-parse", "--short=8", "HEAD").chomp
       branch = version.to_s.split(".")[0..1].join("-") + "-stable"
       built = Time.new.strftime("%Y-%m-%dT%H:%M:%S%:z")
       system "go", "build", "-ldflags", <<~EOS

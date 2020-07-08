@@ -1,15 +1,15 @@
 class Memcached < Formula
   desc "High performance, distributed memory object caching system"
   homepage "https://memcached.org/"
-  url "https://www.memcached.org/files/memcached-1.6.0.tar.gz"
-  sha256 "1a29d75a4004ebee92e19ad96b20100f45713c34594e25f8e8db0aecfff43e05"
+  url "https://www.memcached.org/files/memcached-1.6.6.tar.gz"
+  sha256 "908f0eecfa559129c9e44edc46f02e73afe8faca355b4efc5c86d902fc3e32f7"
   head "https://github.com/memcached/memcached.git"
 
   bottle do
     cellar :any
-    sha256 "f24a1cc41a029a1f021ae4913ed4920d012afa61aa05495347cea1cfd76f63e0" => :catalina
-    sha256 "562e49ae712a7adb81d2600a166d7ad2e4968f0914c30e9af76f4fd84cf72d16" => :mojave
-    sha256 "9d27ad1dd49348f0607117fcc6f0c3b50f042f5947e4e8362dcbe59a1d6a571e" => :high_sierra
+    sha256 "e942aa7a5eb09af40e100d242a5f65a7caffa077b7aecd2b94b4e81ce5f9c3ff" => :catalina
+    sha256 "72ea783ac973864336ac1b7652475edeb523ce716e66ae4d6f745956429a66f5" => :mojave
+    sha256 "47b162f67655a7cc95a706d5df0df04408038d82e4a859cd747b28590921c175" => :high_sierra
   end
 
   depends_on "libevent"
@@ -48,8 +48,7 @@ class Memcached < Formula
 
   test do
     pidfile = testpath/"memcached.pid"
-    # Assumes port 11211 is not already taken
-    system bin/"memcached", "--listen=localhost:11211", "--daemon", "--pidfile=#{pidfile}"
+    system bin/"memcached", "--listen=localhost:#{free_port}", "--daemon", "--pidfile=#{pidfile}"
     sleep 1
     assert_predicate pidfile, :exist?, "Failed to start memcached daemon"
     pid = (testpath/"memcached.pid").read.chomp.to_i

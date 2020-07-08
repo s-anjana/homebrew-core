@@ -2,14 +2,16 @@ class ErlangAT21 < Formula
   desc "Programming language for highly scalable real-time systems"
   homepage "https://www.erlang.org/"
   # Download tarball from GitHub; it is served faster than the official tarball.
-  url "https://github.com/erlang/otp/archive/OTP-21.3.8.14.tar.gz"
-  sha256 "036583f8e6aa539c89db2a32b8524366446c7f6f99b11999bb9eea69a7ce80fd"
+  url "https://github.com/erlang/otp/archive/OTP-21.3.8.16.tar.gz"
+  sha256 "c0a5b680d33d2c58bc16ce10ab9f4c37695b3d5b5a42ca880067e19c26ce4a44"
+  license "Apache-2.0"
 
   bottle do
     cellar :any
-    sha256 "61006bbda1f61e0bf6abc867fb375a1d440da7e283ed670050e1583a3eaf3001" => :catalina
-    sha256 "cb1e924832a81ff1c485e7d985d9d2158c671f5ed9923ffbe0fbece2bfe51be7" => :mojave
-    sha256 "94e3ca78d8f7c3ebe7598be11bc983e27f426b05470d3cce404467cf357a465d" => :high_sierra
+    rebuild 1
+    sha256 "eef910b897d094ff6e61c94f81c2598c0027ea5ab8590f93511de9f0710eb19b" => :catalina
+    sha256 "7340dfc0d566b7d6ab2a71caf77c1ad332cf34710c848fead1e3d1507f95a00f" => :mojave
+    sha256 "f5c3c02c0410c542c9a8e726969c0f964d8346741fa8d321aa3fd3229913545b" => :high_sierra
   end
 
   keg_only :versioned_formula
@@ -34,7 +36,17 @@ class ErlangAT21 < Formula
     sha256 "258b1e0ed1d07abbf08938f62c845450e90a32ec542e94455e5d5b7c333da362"
   end
 
+  # Fix build on Xcode 11.4
+  patch do
+    url "https://github.com/erlang/otp/commit/3edba0dad391431cbadad44a8bd15c75254fc239.patch?full_index=1"
+    sha256 "0c82d9f3bdb668ba78025988c9447bebe91a2f6bb00daa7f0ae7bd1916cd9bfd"
+  end
+
   def install
+    # Work around Xcode 11 clang bug
+    # https://bitbucket.org/multicoreware/x265/issues/514/wrong-code-generated-on-macos-1015
+    ENV.append_to_cflags "-fno-stack-check" if DevelopmentTools.clang_build_version >= 1010
+
     # Unset these so that building wx, kernel, compiler and
     # other modules doesn't fail with an unintelligable error.
     %w[LIBS FLAGS AFLAGS ZFLAGS].each { |k| ENV.delete("ERL_#{k}") }
@@ -80,5 +92,30 @@ class ErlangAT21 < Formula
 
   test do
     system "#{bin}/erl", "-noshell", "-eval", "crypto:start().", "-s", "init", "stop"
+    (testpath/"factorial").write <<~EOS
+      #!#{bin}/escript
+      %% -*- erlang -*-
+      %%! -smp enable -sname factorial -mnesia debug verbose
+      main([String]) ->
+          try
+              N = list_to_integer(String),
+              F = fac(N),
+              io:format("factorial ~w = ~w\n", [N,F])
+          catch
+              _:_ ->
+                  usage()
+          end;
+      main(_) ->
+          usage().
+      
+      usage() ->
+          io:format("usage: factorial integer\n").
+      
+      fac(0) -> 1;
+      fac(N) -> N * fac(N-1).
+    EOS
+    chmod 0755, "factorial"
+    assert_match "usage: factorial integer", shell_output("./factorial")
+    assert_match "factorial 42 = 1405006117752879898543142606244511569936384000000000", shell_output("./factorial 42")
   end
 end

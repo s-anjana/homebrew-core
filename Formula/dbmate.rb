@@ -1,15 +1,16 @@
 class Dbmate < Formula
   desc "Lightweight, framework-agnostic database migration tool"
   homepage "https://github.com/amacneil/dbmate"
-  url "https://github.com/amacneil/dbmate/archive/v1.7.0.tar.gz"
-  sha256 "042ede72743afa8a044f56908105760472dcfdca67880c2622a3cd75ae11ee3d"
+  url "https://github.com/amacneil/dbmate/archive/v1.9.0.tar.gz"
+  sha256 "8c7bb27b12b456b962a1d7828de048f7f0d3efc6ac0a3494fcaebe7a3bd3ad00"
+  license "MIT"
   head "https://github.com/amacneil/dbmate.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "22fc53306f4eeb8fd2e42a0dc1bc6d24528dc0fd132b7f6e40c1fd7ea089b897" => :mojave
-    sha256 "1beb924a7fa984e36b8c8ec6c68909875d373b68eaf8cb41c98a3c1cf8b91bbd" => :high_sierra
-    sha256 "14fa5dda74ecf2583e634cce57a8ad7a630ea0d8b932b2c0fd2428f52c4b04ed" => :sierra
+    sha256 "380ddb2a725ca5e1657afd10acd7b343dc1c5826a4a455f8efe24e7c9bf3d779" => :catalina
+    sha256 "968002c69f18deead19c7f7e7ff9a387df34e7e30abb094c2176d6dc96f74e2a" => :mojave
+    sha256 "b2956de9991ef878a24b0e14a64527e7642fec5330ae8b5ca1c5d509adb42506" => :high_sierra
   end
 
   depends_on "go" => :build

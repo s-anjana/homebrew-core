@@ -1,15 +1,16 @@
 class Starship < Formula
   desc "The cross-shell prompt for astronauts"
   homepage "https://starship.rs"
-  url "https://github.com/starship/starship/archive/v0.37.0.tar.gz"
-  sha256 "9a7344a1f61f195ddee9fef794e3214d47b38c5d18dfba8d66959dff3e06403b"
+  url "https://github.com/starship/starship/archive/v0.44.0.tar.gz"
+  sha256 "b002fa0e2b34ad59330a543461a51648751db4ae8d439d58065a3b9656772fe3"
+  license "ISC"
   head "https://github.com/starship/starship.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "4e395c0227a781bb04554de649931efdb50952d52f0431f18ac4f02ae5d5188c" => :catalina
-    sha256 "d50d05341d3ecf3329f59e1e92aeb8f4c3b519df89c0d775e667995c82f38d7f" => :mojave
-    sha256 "8837011c07c7d9a96ca5ed9ba72eb500f96893d82b8893324b469ba22a12f015" => :high_sierra
+    sha256 "b421825645ddabfdb25559d2db0293fff3823c00d42e56343fd80a103ece3879" => :catalina
+    sha256 "ca22a2ed29177cebaeae173fb783c4c66448582f1ab8becc847276c1c3b9eb6d" => :mojave
+    sha256 "76f716ed29e6fbb85a5342ff36e6d0af4d14d35a7fec513a72e2b8d57fe30465" => :high_sierra
   end
 
   depends_on "rust" => :build
@@ -17,7 +18,7 @@ class Starship < Formula
   uses_from_macos "zlib"
 
   def install
-    system "cargo", "install", "--locked", "--root", prefix, "--path", "."
+    system "cargo", "install", *std_cargo_args
   end
 
   test do

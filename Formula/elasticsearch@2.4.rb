@@ -9,6 +9,8 @@ class ElasticsearchAT24 < Formula
 
   keg_only :versioned_formula
 
+  deprecate! :date => "2018-02-28"
+
   depends_on :java => "1.8"
 
   def cluster_name
@@ -26,7 +28,7 @@ class ElasticsearchAT24 < Formula
     # Set up Elasticsearch for local development:
     inreplace "#{libexec}/config/elasticsearch.yml" do |s|
       # 1. Give the cluster a unique name
-      s.gsub!(/#\s*cluster\.name\: .*/, "cluster.name: #{cluster_name}")
+      s.gsub!(/#\s*cluster\.name: .*/, "cluster.name: #{cluster_name}")
 
       # 2. Configure paths
       s.sub!(%r{#\s*path\.data: /path/to.+$}, "path.data: #{var}/elasticsearch/")
@@ -35,7 +37,7 @@ class ElasticsearchAT24 < Formula
 
     inreplace "#{libexec}/bin/elasticsearch.in.sh" do |s|
       # Configure ES_HOME
-      s.sub!(%r{#\!/bin/sh\n}, "#!/bin/sh\n\nES_HOME=#{libexec}")
+      s.sub!(%r{#!/bin/sh\n}, "#!/bin/sh\n\nES_HOME=#{libexec}")
     end
 
     inreplace "#{libexec}/bin/plugin" do |s|

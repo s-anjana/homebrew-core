@@ -5,17 +5,24 @@ class Hadolint < Formula
 
   desc "Smarter Dockerfile linter to validate best practices"
   homepage "https://github.com/hadolint/hadolint"
-  url "https://github.com/hadolint/hadolint/archive/v1.17.5.tar.gz"
-  sha256 "385e5b5c6c5f962073764ceb2350326ce6effef5304135b20bea04427dccbe1c"
+  url "https://github.com/hadolint/hadolint/archive/v1.18.0.tar.gz"
+  sha256 "0ebe67e543226721c3802dd56db0355575accf50f10c09fe188bbb604aa8c193"
+  license "GPL-3.0"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "a878f0f34ce987a40bc2d5e7a7c4cb9afeebcaa657793eaaf15d9bc025b6f591" => :catalina
-    sha256 "ec4f7290b4a57dafdf8a66543b87a04e9dd9aac590e5810a82779888e396fec3" => :mojave
-    sha256 "2a7e7a9198c8220f0c8ea4a259606cddad3787e02bed7f05d5071394f40548b8" => :high_sierra
+    sha256 "63418b66810e1792249522adb0ec5a4b952e4bef34a5425525ca2d7eccbc69ee" => :catalina
+    sha256 "519d3abecbff0d2cc2aaead01027d18e3b061c45dd63de429c4baab0c677b1ed" => :mojave
+    sha256 "bc87517a3a30252c0477e4862146ac33604b355a8c900f566bfaa1f404a284ad" => :high_sierra
   end
 
   depends_on "haskell-stack" => :build
+
+  uses_from_macos "xz"
+
+  on_linux do
+    depends_on "gmp"
+  end
 
   def install
     # Let `stack` handle its own parallelization

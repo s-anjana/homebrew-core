@@ -1,20 +1,23 @@
 class Gopass < Formula
   desc "The slightly more awesome Standard Unix Password Manager for Teams"
   homepage "https://github.com/gopasspw/gopass"
-  url "https://github.com/gopasspw/gopass/releases/download/v1.8.6/gopass-1.8.6.tar.gz"
-  sha256 "fbffe0f72e51d9e30a10103f00dd12f04bca6572f55976c6dc7049c73c65b715"
+  url "https://github.com/gopasspw/gopass/releases/download/v1.9.2/gopass-1.9.2.tar.gz"
+  sha256 "1017264678d3a2cdc862fc81e3829f390facce6c4a334cb314192ff321837bf5"
+  license "MIT"
+  revision 1
   head "https://github.com/gopasspw/gopass.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "156881b1bcc49f61b6224d5c52eca6ac19432623a0ab8202dff08f965cb48c4d" => :catalina
-    sha256 "b52d40f659774f56428959c273fd9118f0387d7859fe15067233687dfcd9d421" => :mojave
-    sha256 "288b95912064115d781f45500c99ca3c4ef9de5cc207e10ef3e9ceeda5a144c7" => :high_sierra
-    sha256 "3e048b47d532f1d530c1396a5776564815625232b717eb6ed39f73741b1b5c05" => :sierra
+    rebuild 1
+    sha256 "26710a265c2f2adffdb3f34e8b15873f2bc17ff9fa06406190b40f8368190ff9" => :catalina
+    sha256 "a3592f946209c38204bad19c033f3b386e2f227c92783f8f399fbe02eb651b3b" => :mojave
+    sha256 "063a6aebae764af7440c411c527182911ba31b0a688fc413afc684719544df9d" => :high_sierra
   end
 
   depends_on "go" => :build
   depends_on "gnupg"
+  depends_on "terminal-notifier"
 
   def install
     ENV["GOPATH"] = buildpath
@@ -26,7 +29,7 @@ class Gopass < Formula
       system "make", "install"
     end
 
-    output = Utils.popen_read("#{bin}/gopass completion bash")
+    output = Utils.safe_popen_read("#{bin}/gopass", "completion", "bash")
     (bash_completion/"gopass-completion").write output
   end
 

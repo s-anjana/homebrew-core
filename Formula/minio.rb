@@ -1,16 +1,17 @@
 class Minio < Formula
-  desc "Amazon S3 compatible object storage server"
-  homepage "https://github.com/minio/minio"
+  desc "High Performance, Kubernetes Native Object Storage"
+  homepage "https://min.io"
   url "https://github.com/minio/minio.git",
-      :tag      => "RELEASE.2020-03-14T02-21-58Z",
-      :revision => "2e9fed1a14e5640219c3fc5ef51b30b937f42c0c"
-  version "20200314022158"
+      :tag      => "RELEASE.2020-07-02T00-15-09Z",
+      :revision => "11021b6a002c8ea32f8849f91ddd5e5c2aa47198"
+  version "20200702001509"
+  license "Apache-2.0"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "7e7b3b3b014c467ceef8961b1e71b99fabfe5012e1f193baf05ca9b6a153e5c7" => :catalina
-    sha256 "04d55a605ee0cc721ab6eef4ef9dc990eea14d7d2016bf2e253d9b8571706480" => :mojave
-    sha256 "77c153346843f3cc36c65b1935e361aebfaa7b4c8cc39f80550a5942a7e7797b" => :high_sierra
+    sha256 "2e82e7d89e2559865c52f412170299bc2fde6c7c80eb485f22ff776e5f34872e" => :catalina
+    sha256 "a3746a51498cb79ca0670ac2488d7462504d980861d0b90f2c38b637c8dd21c7" => :mojave
+    sha256 "5f3e0d0f9d96af49048e71e22da26321b2d0a33abcb943704fb92cb7152dd325" => :high_sierra
   end
 
   depends_on "go" => :build
@@ -20,7 +21,7 @@ class Minio < Formula
       system "go", "build", "-trimpath", "-o", bin/"minio"
     else
       release = `git tag --points-at HEAD`.chomp
-      version = release.gsub(/RELEASE\./, "").chomp.gsub(/T(\d+)\-(\d+)\-(\d+)Z/, 'T\1:\2:\3Z')
+      version = release.gsub(/RELEASE\./, "").chomp.gsub(/T(\d+)-(\d+)-(\d+)Z/, 'T\1:\2:\3Z')
       commit = `git rev-parse HEAD`.chomp
       proj = "github.com/minio/minio"
 

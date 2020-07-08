@@ -3,22 +3,22 @@ class B2Tools < Formula
 
   desc "B2 Cloud Storage Command-Line Tools"
   homepage "https://github.com/Backblaze/B2_Command_Line_Tool"
-  url "https://github.com/Backblaze/B2_Command_Line_Tool/archive/v1.4.2.tar.gz"
-  sha256 "2d6382b94af59dcaa44dd546252807e0364d1b61f169584829ebbf82458e7078"
+  url "https://github.com/Backblaze/B2_Command_Line_Tool/archive/v2.0.0.tar.gz"
+  sha256 "c7ebc5650e7d5d8945fc004056bffea06e8278e54053b3dacd2d2daaac242565"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "e21e5a9daf848f8a36850cad7d18073c8b8af9db6bf2e6860549b6e7123e2b00" => :catalina
-    sha256 "6d034a4b3ef822dd53b09a17ff0e924d6ad130cc6b376287425cc0300d425bc6" => :mojave
-    sha256 "450cd0e09c64458f5af99414f523f56b93275c5efa6ed2c0a6a18420917d2a31" => :high_sierra
+    sha256 "12f9cb755703e43d3cd9a0cb0fe180f523957f938a9ad2230ce4b331055ef131" => :catalina
+    sha256 "eb1b00f5b35be71648ba4ad3c5aac6d4e784e198995a2fc2b0f65541e249a3d7" => :mojave
+    sha256 "7ecf4f59a02475ac05c13a3d2354c1253ca09367d4d007b639b06640a432dc79" => :high_sierra
   end
 
-  depends_on "python"
+  depends_on "python@3.8"
 
   conflicts_with "boost-build", :because => "both install `b2` binaries"
 
   def install
-    venv = virtualenv_create(libexec, "python3")
+    venv = virtualenv_create(libexec, Formula["python@3.8"].opt_bin/"python3")
     system libexec/"bin/pip", "install", "-v", "--no-binary", ":all:",
                               "--ignore-installed", buildpath
     system libexec/"bin/pip", "uninstall", "-y", "b2"

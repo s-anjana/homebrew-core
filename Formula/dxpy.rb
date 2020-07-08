@@ -3,18 +3,21 @@ class Dxpy < Formula
 
   desc "DNAnexus toolkit utilities and platform API bindings for Python"
   homepage "https://github.com/dnanexus/dx-toolkit"
-  url "https://files.pythonhosted.org/packages/47/18/b143d60134ec2aee2cc3e5c5fa2a53067013181c2856944c817bfc062f1c/dxpy-0.290.1.tar.gz"
-  sha256 "621d34943f050a848765825a8be1c142578d0d9c19bb7e112c8b7d4ecebbf0ea"
-  revision 1
+  url "https://files.pythonhosted.org/packages/ce/76/06ee35778ee3604ce1d873caee67a982effe31c2e9d534c3a95a5bb64806/dxpy-0.296.0.tar.gz"
+  sha256 "298f01a5a562537c087dc54c749c5d479040b28f463f2fef2aee6a2acbb9afd4"
 
   bottle do
     cellar :any
-    sha256 "45b284e67465c32efc3c61c19817b94dd530cbbdc876b8b0bb9a1898cd28405f" => :catalina
-    sha256 "50398e7cf18f3b9f36acfa984ff9bdad4fc0a04af0a90dd6201ad386fce9d0e5" => :mojave
-    sha256 "787d70a5c6d0ced96d7bc96c8b98488851d1027116d0a9769a9e9569a70f9c4b" => :high_sierra
+    sha256 "ed6acd9ad7100e193b4560ecb116ced5f089556e7402827c75e3125f2834f0e1" => :catalina
+    sha256 "7cf77607be63ed0d68e6a788e2e894678c1c95c65180dda119df23f8231af9cd" => :mojave
+    sha256 "93eed5ed9ef0779201c0b9785c5c85b2db8a90fc0379ab6ac0229ee103d3e528" => :high_sierra
   end
 
   depends_on "python@3.8"
+
+  on_macos do
+    depends_on "readline"
+  end
 
   resource "argcomplete" do
     url "https://files.pythonhosted.org/packages/43/61/345856864a72ccc004bea5f74183c58bfd6675f9eab931ff9ce21a8fe06b/argcomplete-1.11.1.tar.gz"
@@ -32,8 +35,8 @@ class Dxpy < Formula
   end
 
   resource "certifi" do
-    url "https://files.pythonhosted.org/packages/41/bf/9d214a5af07debc6acf7f3f257265618f1db242a3f8e49a9b516f24523a6/certifi-2019.11.28.tar.gz"
-    sha256 "25b64c7da4cd7479594d035c08c2d809eb4aab3a26e5a990ea98cc450c320f1f"
+    url "https://files.pythonhosted.org/packages/40/a7/ded59fa294b85ca206082306bba75469a38ea1c7d44ea7e1d64f5443d67a/certifi-2020.6.20.tar.gz"
+    sha256 "5930595817496dd21bb8dc35dad090f1c2cd0adfaf21204bf6732ca5d8ee34d3"
   end
 
   resource "cffi" do
@@ -52,8 +55,8 @@ class Dxpy < Formula
   end
 
   resource "idna" do
-    url "https://files.pythonhosted.org/packages/cb/19/57503b5de719ee45e83472f339f617b0c01ad75cba44aba1e4c97c2b0abd/idna-2.9.tar.gz"
-    sha256 "7588d1c14ae4c77d74036e8c22ff447b26d0fde8f007354fd48a7814db15b7cb"
+    url "https://files.pythonhosted.org/packages/ea/b7/e0e3c1c467636186c39925827be42f16fee389dc404ac29e930e9136be70/idna-2.10.tar.gz"
+    sha256 "b307872f855b18632ce0c21c5e45be78c0ea7ae4c15c828c20788b26921eb3f6"
   end
 
   resource "psutil" do
@@ -77,21 +80,21 @@ class Dxpy < Formula
   end
 
   resource "requests" do
-    url "https://files.pythonhosted.org/packages/f5/4f/280162d4bd4d8aad241a21aecff7a6e46891b905a4341e7ab549ebaf7915/requests-2.23.0.tar.gz"
-    sha256 "b3f43d496c6daba4493e7c431722aeb7dbc6288f52a6e04e7b6023b0247817e6"
+    url "https://files.pythonhosted.org/packages/da/67/672b422d9daf07365259958912ba533a0ecab839d4084c487a5fe9a5405f/requests-2.24.0.tar.gz"
+    sha256 "b3559a131db72c33ee969480840fff4bb6dd111de7dd27c8ee1f820f4f00231b"
   end
 
   resource "six" do
-    url "https://files.pythonhosted.org/packages/21/9f/b251f7f8a76dec1d6651be194dfba8fb8d7781d10ab3987190de8391d08e/six-1.14.0.tar.gz"
-    sha256 "236bdbdce46e6e6a3d61a337c0f8b763ca1e8717c03b369e87a7ec7ce1319c0a"
+    url "https://files.pythonhosted.org/packages/6b/34/415834bfdafca3c5f451532e8a8d9ba89a21c9743a0c59fbd0205c7f9426/six-1.15.0.tar.gz"
+    sha256 "30639c035cdb23534cd4aa2dd52c3bf48f06e5f4a941509c8bafd8ce11080259"
   end
 
   resource "urllib3" do
-    url "https://files.pythonhosted.org/packages/09/06/3bc5b100fe7e878d3dee8f807a4febff1a40c213d2783e3246edde1f3419/urllib3-1.25.8.tar.gz"
-    sha256 "87716c2d2a7121198ebcb7ce7cccf6ce5e9ba539041cfbaeecfb641dc0bf6acc"
+    url "https://files.pythonhosted.org/packages/05/8c/40cd6949373e23081b3ea20d5594ae523e681b6f472e600fbc95ed046a36/urllib3-1.25.9.tar.gz"
+    sha256 "3018294ebefce6572a474f0604c2021e33b3fd8006ecd11d62107a5d2a963527"
   end
 
-  resource "websocket-client" do
+  resource "websocket_client" do
     url "https://files.pythonhosted.org/packages/fb/1f/9acd71b77e66fafb19cfb023e50cbb7ed2c3be3c72db999162bd36c518c4/websocket_client-0.53.0.tar.gz"
     sha256 "c42b71b68f9ef151433d6dcc6a7cb98ac72d2ad1e3a74981ca22bc5d9134f166"
   end

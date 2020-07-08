@@ -1,16 +1,16 @@
 class Healpix < Formula
   desc "Hierarchical Equal Area isoLatitude Pixelization of a sphere"
   homepage "https://healpix.jpl.nasa.gov"
-  url "https://downloads.sourceforge.net/project/healpix/Healpix_3.50/Healpix_3.50_2018Dec10.tar.gz"
-  version "3.50"
-  sha256 "ec9378888ef8365f9a83fa82e3ef3b4e411ed6a63aca33b74a6917c05334bf4f"
+  url "https://downloads.sourceforge.net/project/healpix/Healpix_3.60/Healpix_3.60_2019Dec18.tar.gz"
+  version "3.60"
+  sha256 "bf1797022fb57b5b8381290955e8c4161e3ca9b9d88e3e32d55b092a4a04b500"
   revision 1
 
   bottle do
     cellar :any
-    sha256 "15b3b3d37de957c018e56ccfdc87c5d44cbb658b3d197f90b660b194f44d7b54" => :catalina
-    sha256 "2c255d6791ca868a7a6568f609bcf7d9e52350dafa615ecabad0adb924863c34" => :mojave
-    sha256 "5a1d7d01df7445395df8475a2cb2c2e7d5200c73a3702f57109566a7f8698fa3" => :high_sierra
+    sha256 "06f325d3c2ca5ea3ba59102406b9db993df33db6eb3767375f30e6dbd736c068" => :catalina
+    sha256 "9b32669974a4ad5c1daba24a0841eddb092416c902e6b83d61f34d240e872a7d" => :mojave
+    sha256 "9e809e0585035821b9e35cdb2c4bcecba7f6f44528f3470f8b3d73d43312d46b" => :high_sierra
   end
 
   depends_on "autoconf" => :build
@@ -20,21 +20,26 @@ class Healpix < Formula
   depends_on "cfitsio"
 
   def install
-    configure_args = %W[
+    configure_args = %w[
       --disable-dependency-tracking
       --disable-silent-rules
-      --prefix=#{prefix}
     ]
 
     cd "src/C/autotools" do
       system "autoreconf", "--install"
-      system "./configure", *configure_args
+      system "./configure", "--prefix=#{prefix}", *configure_args
       system "make", "install"
     end
 
-    cd "src/cxx/autotools" do
-      system "autoreconf", "--install"
-      system "./configure", *configure_args
+    cd "src/common_libraries/libsharp" do
+      system "./configure", "--prefix=#{buildpath}/libsharp", *configure_args
+      system "make", "install"
+    end
+
+    cd "src/cxx" do
+      ENV["SHARP_CFLAGS"] = "-I#{buildpath}/libsharp/include"
+      ENV["SHARP_LIBS"] = "-L#{buildpath}/libsharp/lib"
+      system "./configure", "--prefix=#{prefix}", *configure_args
       system "make", "install"
     end
   end

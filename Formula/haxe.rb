@@ -2,23 +2,27 @@ class Haxe < Formula
   desc "Multi-platform programming language"
   homepage "https://haxe.org/"
   url "https://github.com/HaxeFoundation/haxe.git",
-      :tag      => "4.0.5",
-      :revision => "67feacebc59d5cd9dce232058f12cb933622d619"
+      :tag      => "4.1.2",
+      :revision => "74ee129d6856c8fca8e375b795363eb64a14240e"
   head "https://github.com/HaxeFoundation/haxe.git", :branch => "development"
 
   bottle do
     cellar :any
-    sha256 "e08d077a5ef5fb969ab8054ce75b60c1f73a5405a655c49671a211390b1bcaef" => :catalina
-    sha256 "c204cefc408d68628d25b11c66331b8fc4f8b37573029480fc6ebc781991ce97" => :mojave
-    sha256 "b90a4c12a07d00919081941b000bf98fcb8e560cd226beadb9123f67f6734049" => :high_sierra
+    sha256 "b2cba26b2261e9678e535d29b1232f7033db8b96b35bcd471f057099bb936f97" => :catalina
+    sha256 "218a30f066c2e56c4f4a1d7290124db7cf7715f54e0218c8e37ccd52b36bb747" => :mojave
+    sha256 "59bd36a2799b9e13064f25124f4d3d18d991d50142d6063c25bcc5452e1c5ed4" => :high_sierra
   end
 
   depends_on "cmake" => :build
   depends_on "ocaml" => :build
   depends_on "opam" => :build
   depends_on "pkg-config" => :build
+  depends_on "mbedtls"
   depends_on "neko"
   depends_on "pcre"
+
+  uses_from_macos "m4" => :build
+  uses_from_macos "unzip" => :build
 
   def install
     # Build requires targets to be built in specific order
@@ -61,5 +65,16 @@ class Haxe < Formula
     ENV["HAXE_STD_PATH"] = "#{HOMEBREW_PREFIX}/lib/haxe/std"
     system "#{bin}/haxe", "-v", "Std"
     system "#{bin}/haxelib", "version"
+
+    (testpath/"HelloWorld.hx").write <<~EOS
+      import js.html.Console;
+
+      class HelloWorld {
+          static function main() Console.log("Hello world!");
+      }
+    EOS
+    system "#{bin}/haxe", "-js", "out.js", "-main", "HelloWorld"
+    _, stderr, = Open3.capture3("osascript -so -lJavaScript out.js")
+    assert_match /^Hello world!$/, stderr
   end
 end

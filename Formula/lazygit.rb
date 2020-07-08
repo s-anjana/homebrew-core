@@ -1,14 +1,15 @@
 class Lazygit < Formula
   desc "Simple terminal UI for git commands"
   homepage "https://github.com/jesseduffield/lazygit/"
-  url "https://github.com/jesseduffield/lazygit/archive/v0.16.2.tar.gz"
-  sha256 "76c043e59afc403d7353cdb188ac6850ce4c4125412e291240c787b0187e71c6"
+  url "https://github.com/jesseduffield/lazygit/archive/v0.20.4.tar.gz"
+  sha256 "8af316bf9d0916e8b19ce590a80664314a38652af9ef115083686bc9720fa7b9"
+  license "MIT"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "6d7a285accad08d22ffe3cf34f552ce47c2c320805bb6fc4a956e39e156dfddb" => :catalina
-    sha256 "fa87fdc8949faabbfb6cdaa553d3c4465119444d797335a4519350d11c2e4876" => :mojave
-    sha256 "f64cfa2998a5f9cc072906b0cafba468a14d202875bb5322ac79cc99deb3628a" => :high_sierra
+    sha256 "e1208b282f14c75a93a01f791009ea644e7438ea812e411fef6a8a47f63acbe5" => :catalina
+    sha256 "2a8ca3c11245e60ea115b0e7c4a24c85724096e4146040ea88a4b679af8a4b07" => :mojave
+    sha256 "fb0346d006b244733af581f5e249e643d8653cc1b1d9c42bec7e71e8b3c39bae" => :high_sierra
   end
 
   depends_on "go" => :build

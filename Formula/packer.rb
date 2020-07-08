@@ -2,28 +2,22 @@ class Packer < Formula
   desc "Tool for creating identical machine images for multiple platforms"
   homepage "https://packer.io"
   url "https://github.com/hashicorp/packer.git",
-      :tag      => "v1.5.4",
-      :revision => "30aa6a0cb45e38638479a9d9c1889e9086b686c4"
+      :tag      => "v1.6.0",
+      :revision => "b05ca9e9e1989e832e02b5f676917a5b9c683606"
+  license "MPL-2.0"
   head "https://github.com/hashicorp/packer.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "92f840c0aa8c41bb864a604beb3891b33b240565fef2c5fa26c5ea1c05d916c8" => :catalina
-    sha256 "f7872d2bdb8401611b9036c1f03fac33e9edcceed2469d45ef49cafa216145a6" => :mojave
-    sha256 "ec718102d4d98ac9499167169bcbafb0cc356e3fdeb6eff018ae84fade86fee0" => :high_sierra
+    sha256 "84918bf57b75d3127afc1aefddeb90eafa5b9f9669cbb87e823a94822ec12aa9" => :catalina
+    sha256 "a6bea8c5bbe38a62d40e530b86d46ab747463affe288963adadd9334bf07c810" => :mojave
+    sha256 "653dcd30c77a8989039754053efbee6fe901db91866e675b8f0ff8e0d046195e" => :high_sierra
   end
 
-  depends_on "coreutils" => :build
   depends_on "go" => :build
 
   def install
-    (buildpath/"bin").mkpath
-    if build.head?
-      system "make", "bin"
-    else
-      system "make", "releasebin"
-    end
-    bin.install buildpath/"bin/packer"
+    system "go", "build", *std_go_args
     zsh_completion.install "contrib/zsh-completion/_packer"
     prefix.install_metafiles
   end

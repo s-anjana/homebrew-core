@@ -3,15 +3,17 @@ class Vapoursynth < Formula
 
   desc "Video processing framework with simplicity in mind"
   homepage "http://www.vapoursynth.com"
-  url "https://github.com/vapoursynth/vapoursynth/archive/R48.tar.gz"
-  sha256 "3e98d134e16af894cf7040e4383e4ef753cafede34d5d77c42a2bb89790c50a8"
+  url "https://github.com/vapoursynth/vapoursynth/archive/R50.tar.gz"
+  sha256 "b9dc7ce904c6a3432df7491b7052bc4cf09ccf1e7a703053f8079a2267522f97"
+  license "LGPL-2.1"
+  revision 1
   head "https://github.com/vapoursynth/vapoursynth.git"
 
   bottle do
     cellar :any
-    sha256 "63b997756423a862499224f2d7ebd5fd5c9444277f35260fe6dd03886ed795a4" => :catalina
-    sha256 "ca945b264d6e4b60c39755adfb5205f3ff4c73221b88f709fdeec42009b093a5" => :mojave
-    sha256 "9323c3219e9690039ab5dde08bf0d8e3da8b3453d2725a790c7981808f314dc4" => :high_sierra
+    sha256 "4839ac1ac710a243b886789f560029e1e6e5f6b13eedb2a07f2666877fb17e54" => :catalina
+    sha256 "7264f344e3cf299a5e8ceaf9ef910db025ff403552af63a2cfd8e77cdf28c5d0" => :mojave
+    sha256 "5c190cc18c3b61b2425c01ef2d007a7fcf8c13866be3e73ce9fe48e558622117" => :high_sierra
   end
 
   depends_on "autoconf" => :build
@@ -19,24 +21,24 @@ class Vapoursynth < Formula
   depends_on "libtool" => :build
   depends_on "nasm" => :build
   depends_on "pkg-config" => :build
-
   depends_on :macos => :el_capitan # due to zimg dependency
-  depends_on "python"
+  depends_on "python@3.8"
   depends_on "zimg"
 
   resource "Cython" do
-    url "https://files.pythonhosted.org/packages/9c/9b/706dac7338c2860cd063a28cdbf5e9670995eaea408abbf2e88ba070d90d/Cython-0.29.14.tar.gz"
-    sha256 "e4d6bb8703d0319eb04b7319b12ea41580df44fd84d83ccda13ea463c6801414"
+    url "https://files.pythonhosted.org/packages/99/36/a3dc962cc6d08749aa4b9d85af08b6e354d09c5468a3e0edc610f44c856b/Cython-0.29.17.tar.gz"
+    sha256 "6361588cb1d82875bcfbad83d7dd66c442099759f895cf547995f00601f9caf2"
   end
 
   def install
-    venv = virtualenv_create(buildpath/"cython", "python3")
+    venv = virtualenv_create(buildpath/"cython", Formula["python@3.8"].opt_bin/"python3")
     venv.pip_install "Cython"
     system "./autogen.sh"
     inreplace "Makefile.in", "pkglibdir = $(libdir)", "pkglibdir = $(exec_prefix)"
     system "./configure", "--prefix=#{prefix}",
                           "--with-cython=#{buildpath}/cython/bin/cython",
                           "--with-plugindir=#{HOMEBREW_PREFIX}/lib/vapoursynth"
+    system "make", 'LIBS="$(python3-config --ldflags --embed)"'
     system "make", "install"
     %w[eedi3 miscfilters morpho removegrain vinverse vivtc].each do |filter|
       rm prefix/"vapoursynth/lib#{filter}.la"
@@ -64,14 +66,14 @@ class Vapoursynth < Formula
         brew install ffms2
         ln -s "../libffms2.dylib" "#{HOMEBREW_PREFIX}/lib/vapoursynth/libffms2.dylib"
       For more information regarding plugins, please visit:
-        \x1B[4mhttp://www.vapoursynth.com/doc/pluginlist.html\x1B[0m
+        \x1B[4mhttp://www.vapoursynth.com/doc/plugins.html\x1B[0m
     EOS
   end
 
   test do
-    py3 = Language::Python.major_minor_version "python3"
-    ENV.prepend_path "PYTHONPATH", lib/"python#{py3}/site-packages"
-    system "python3", "-c", "import vapoursynth"
+    xy = Language::Python.major_minor_version Formula["python@3.8"].opt_bin/"python3"
+    ENV.prepend_path "PYTHONPATH", lib/"python#{xy}/site-packages"
+    system Formula["python@3.8"].opt_bin/"python3", "-c", "import vapoursynth"
     system bin/"vspipe", "--version"
   end
 end

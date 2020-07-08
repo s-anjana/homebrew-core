@@ -1,15 +1,16 @@
 class TraefikAT1 < Formula
   desc "Modern reverse proxy (v1.7)"
   homepage "https://traefik.io/"
-  url "https://github.com/containous/traefik/releases/download/v1.7.21/traefik-v1.7.21.src.tar.gz"
-  version "1.7.21"
-  sha256 "94a30fffba6d25aa1375a538c211838862e0ea1294625dd3553a36b27a263b0f"
+  url "https://github.com/containous/traefik/releases/download/v1.7.24/traefik-v1.7.24.src.tar.gz"
+  version "1.7.24"
+  sha256 "8f9e0ba3cbb6537e47c675c806d6e6de3267241a48ea7291b19673d524f78a88"
+  license "MIT"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "4559498035b165719a77290c05c9574d9bfd03d13574b303d66357075bc5f6ec" => :catalina
-    sha256 "ae7f6c0772a9da08494b7325dc14f5059051c83219117d710908acbb36cb18f7" => :mojave
-    sha256 "de4df87817715eafccd9730d6b2bb12b882f2775626b5bf58c3c6afac586d703" => :high_sierra
+    sha256 "f50589618ba4147731cadda2451d08f95a6d56ad79f823b657ab64db73f590ed" => :catalina
+    sha256 "993885ac94857dd2828fdf05188326a6ebd9e8da38d5deaafbcfa4094b4738d2" => :mojave
+    sha256 "2c00bae6b3c468a32cdaaa59f58d33cc3de61899723a355d99cf34f0bd93c773" => :high_sierra
   end
 
   keg_only :versioned_formula
@@ -69,21 +70,14 @@ class TraefikAT1 < Formula
   end
 
   test do
-    require "socket"
-
-    web_server = TCPServer.new(0)
-    http_server = TCPServer.new(0)
-    web_port = web_server.addr[1]
-    http_port = http_server.addr[1]
-    web_server.close
-    http_server.close
+    web_port = free_port
+    http_port = free_port
 
     (testpath/"traefik.toml").write <<~EOS
       [web]
-      address = ":#{web_port}"
-
+        address = ":#{web_port}"
       [entryPoints.http]
-      address = ":#{http_port}"
+        address = ":#{http_port}"
     EOS
 
     begin
@@ -91,10 +85,14 @@ class TraefikAT1 < Formula
         exec bin/"traefik", "--configfile=#{testpath}/traefik.toml"
       end
       sleep 5
+      cmd = "curl -sIm3 -XGET http://127.0.0.1:#{http_port}/"
+      assert_match /404 Not Found/m, shell_output(cmd)
+      sleep 1
       cmd = "curl -sIm3 -XGET http://localhost:#{web_port}/dashboard/"
       assert_match /200 OK/m, shell_output(cmd)
     ensure
-      Process.kill("HUP", pid)
+      Process.kill(9, pid)
+      Process.wait(pid)
     end
   end
 end

@@ -20,10 +20,11 @@ class Fontconfig < Formula
   end
 
   head do
-    url "https://anongit.freedesktop.org/git/fontconfig", :using => :git
+    url "https://anongit.freedesktop.org/git/fontconfig.git"
 
     depends_on "autoconf" => :build
     depends_on "automake" => :build
+    depends_on "gettext" => :build
     depends_on "libtool" => :build
   end
 
@@ -32,6 +33,10 @@ class Fontconfig < Formula
 
   uses_from_macos "bzip2"
   uses_from_macos "expat"
+
+  on_linux do
+    depends_on "util-linux"
+  end
 
   def install
     font_dirs = %w[

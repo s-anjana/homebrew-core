@@ -1,16 +1,16 @@
 class Mpd < Formula
   desc "Music Player Daemon"
   homepage "https://www.musicpd.org/"
-  url "https://www.musicpd.org/download/mpd/0.21/mpd-0.21.20.tar.xz"
-  sha256 "422ef0a996d961f3ebc6856395f3a855b45fa0059910e878fb98281007e510e1"
-  revision 1
+  url "https://www.musicpd.org/download/mpd/0.21/mpd-0.21.24.tar.xz"
+  sha256 "84632a7e82e672b3a6d71651a75d05fb7acd62645c33e3f3af5a1067cfa64cd6"
+  license "GPL-2.0"
   head "https://github.com/MusicPlayerDaemon/MPD.git"
 
   bottle do
     cellar :any
-    sha256 "ba2b061e452d78cd78b6a6c2800cb402c5023923a972dea5798e5c5ce00dbdeb" => :catalina
-    sha256 "cce9b243179b0b6e0ce7093596744343540200007ef3b3018782fb4b8c6322f3" => :mojave
-    sha256 "84969afcc6c31b7dcb4a4f0244060fd17b3e806fb479673f32a5e5fe56b1471c" => :high_sierra
+    sha256 "afeeb86ddfedd0c66cb703abad7d967dcd5e5d5199b880642f00390c678d9c97" => :catalina
+    sha256 "cfad8e2a2f6ddf22d85cab6570c784da25776782c67c5b6d65fa2596c8c10467" => :mojave
+    sha256 "2d303a1da07f1d9fbdca65fb08fdef4134fd066e6408c6dddbe750000f4323fb" => :high_sierra
   end
 
   depends_on "boost" => :build
@@ -42,8 +42,7 @@ class Mpd < Formula
     # The build is fine with G++.
     ENV.libcxx
 
-    args = %W[
-      --prefix=#{prefix}
+    args = std_meson_args + %W[
       --sysconfdir=#{etc}
       -Dlibwrap=disabled
       -Dmad=disabled
@@ -106,14 +105,21 @@ class Mpd < Formula
   end
 
   test do
+    port = free_port
+
+    (testpath/"mpd.conf").write <<~EOS
+      bind_to_address "127.0.0.1"
+      port "#{port}"
+    EOS
+
     pid = fork do
-      exec "#{bin}/mpd --stdout --no-daemon --no-config"
+      exec "#{bin}/mpd --stdout --no-daemon #{testpath}/mpd.conf"
     end
     sleep 2
 
     begin
-      ohai "Connect to MPD command (localhost:6600)"
-      TCPSocket.open("localhost", 6600) do |sock|
+      ohai "Connect to MPD command (localhost:#{port})"
+      TCPSocket.open("localhost", port) do |sock|
         assert_match "OK MPD", sock.gets
         ohai "Ping server"
         sock.puts("ping")

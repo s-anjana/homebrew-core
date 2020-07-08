@@ -5,18 +5,25 @@ class PostgresqlAT94 < Formula
   sha256 "f5c014fc4a5c94e8cf11314cbadcade4d84213cfcc82081c9123e1b8847a20b9"
 
   bottle do
-    sha256 "708f31b60651088de5c546f3c5f893d4f1a5b77716b9faeb362a3ce457dc408c" => :catalina
-    sha256 "d9d654cbe9943f14744238c071a0a52c5a80616e05e007ae776c35d49a5f2740" => :mojave
-    sha256 "eade79680eefce8f954c2d3348453f6c7dd2ae3bd7d7560f3a50a283af45d8d1" => :high_sierra
+    rebuild 2
+    sha256 "86d9c75e0454e8285764827fb24b96dc0cc75e07dfe7bb808fa3682629467aa6" => :catalina
+    sha256 "e90c1fd44cd76e40b5326fe7692466c4e21e2380e9856dea816ad8fc1a89ee5c" => :mojave
+    sha256 "0900dd52dda6b761f64e553274c2d3da33fefd38bfa0e06ed7e6df1636642d28" => :high_sierra
   end
 
   keg_only :versioned_formula
+
+  deprecate! :date => "2020-02-13"
 
   depends_on "openssl@1.1"
   depends_on "readline"
 
   uses_from_macos "libxslt"
   uses_from_macos "perl"
+
+  on_linux do
+    depends_on "util-linux"
+  end
 
   def install
     # Fix "configure: error: readline library not found"
@@ -55,6 +62,8 @@ class PostgresqlAT94 < Formula
   end
 
   def post_install
+    return if ENV["CI"]
+
     (var/"log").mkpath
     (var/name).mkpath
     system "#{bin}/initdb", "#{var}/#{name}" unless File.exist? "#{var}/#{name}/PG_VERSION"
@@ -107,6 +116,6 @@ class PostgresqlAT94 < Formula
   end
 
   test do
-    system "#{bin}/initdb", testpath/"test"
+    system "#{bin}/initdb", testpath/"test" unless ENV["CI"]
   end
 end

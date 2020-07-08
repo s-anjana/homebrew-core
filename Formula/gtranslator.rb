@@ -3,17 +3,17 @@ class Gtranslator < Formula
   homepage "https://wiki.gnome.org/Design/Apps/Translator"
   url "https://download.gnome.org/sources/gtranslator/3.36/gtranslator-3.36.0.tar.xz"
   sha256 "2daa1d3b59b4a35ef54df087345b03e1703e725081f9dac543539228a715add3"
+  revision 3
 
   bottle do
-    sha256 "90ddfb2acb333a7fb7ee2ab3d6de67c370cfcf05b4644c389dab6da55ae09698" => :catalina
-    sha256 "f812c486897ba964e13cb02fc17e3f1d02ff9c78616eee69d055a3fd1d72120a" => :mojave
-    sha256 "4657887f0ab62e4d4ed176d7625cacc752d2bf9d8a93e05404d26aa8a3b09fb4" => :high_sierra
+    sha256 "33dd6fa5518dd793a54e79a1245fa8c339ab396d75e593477f64145d9c2ff877" => :catalina
+    sha256 "2f8aa54a06d06dd3dab570d2031ce66bb92a90c888999dda38126de9aceef859" => :mojave
+    sha256 "801eaf1384023bc5345dee58ae35a07b53d25c8fe69cad1b1a12a5b6158b812d" => :high_sierra
   end
 
   depends_on "meson" => :build
   depends_on "ninja" => :build
   depends_on "pkg-config" => :build
-  depends_on "python" => :build
   depends_on "adwaita-icon-theme"
   depends_on "glib"
   depends_on "gspell"
@@ -30,7 +30,7 @@ class Gtranslator < Formula
     # stop meson_post_install.py from doing what needs to be done in the post_install step
     ENV["DESTDIR"] = "/"
     mkdir "build" do
-      system "meson", "--prefix=#{prefix}", ".."
+      system "meson", *std_meson_args, ".."
       system "ninja", "-v"
       system "ninja", "install", "-v"
     end

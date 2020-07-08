@@ -2,15 +2,16 @@ class Bazelisk < Formula
   desc "User-friendly launcher for Bazel"
   homepage "https://github.com/bazelbuild/bazelisk/"
   url "https://github.com/bazelbuild/bazelisk.git",
-      :tag      => "v1.3.0",
-      :revision => "24b8784d71096f3dfa38d6533a770f45a49cda43"
+      :tag      => "v1.5.0",
+      :revision => "9f7127db3c137e32a21484f9345bbc0da8301135"
+  license "Apache-2.0"
   head "https://github.com/bazelbuild/bazelisk.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "e9a394c4e1f686f37b62040be9e8fcc7571bfd32d8c9ff9a43e6c59905053a4c" => :catalina
-    sha256 "e9a394c4e1f686f37b62040be9e8fcc7571bfd32d8c9ff9a43e6c59905053a4c" => :mojave
-    sha256 "e9a394c4e1f686f37b62040be9e8fcc7571bfd32d8c9ff9a43e6c59905053a4c" => :high_sierra
+    sha256 "9c189bca9ddac7acaab8da42f451a8707320c52b4b233ab9b42cbfefc94310d9" => :catalina
+    sha256 "9c189bca9ddac7acaab8da42f451a8707320c52b4b233ab9b42cbfefc94310d9" => :mojave
+    sha256 "9c189bca9ddac7acaab8da42f451a8707320c52b4b233ab9b42cbfefc94310d9" => :high_sierra
   end
 
   depends_on "bazel" => :build

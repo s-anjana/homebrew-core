@@ -3,16 +3,17 @@
 class Mercurial < Formula
   desc "Scalable distributed version control system"
   homepage "https://mercurial-scm.org/"
-  url "https://www.mercurial-scm.org/release/mercurial-5.3.1.tar.gz"
-  sha256 "f7c1f96de2199d6b38593ea865f08c0521fbd8e2fd52bd332414bf9fe5bf72d9"
+  url "https://www.mercurial-scm.org/release/mercurial-5.4.2.tar.gz"
+  sha256 "5c8b93da701ee39e312da9e35a7f3163e17ed173a4707857bc467c3b3ab74853"
+  license "GPL-2.0"
 
   bottle do
-    sha256 "84f3d1b2e5d2352627ac1a8c4c533f5f9f0f31cc5001e997440d123e7e43ae72" => :catalina
-    sha256 "e6eaf18db8088bece897fbf8232e1b712137831b2f5a961d81fe3476d1960bb9" => :mojave
-    sha256 "25bce8f7d2f222f755901293e22aada1f8b4a7b8a3ecfe31c2455033da4d277e" => :high_sierra
+    sha256 "4442d9b0fb15881077b1db6c4a16b371e4bc2f154de1ed81a11e9a41ee679077" => :catalina
+    sha256 "88e37b6acefc5dd471484482bdb6f4f12b7fa44621cd11233176b08facc2648b" => :mojave
+    sha256 "8419bbee00d870653b44dbf144b8509e1a8db22e5c8560624ddf596aa7d6d47b" => :high_sierra
   end
 
-  depends_on "python"
+  depends_on "python@3.8"
 
   def install
     ENV["HGPYTHON3"] = "1"

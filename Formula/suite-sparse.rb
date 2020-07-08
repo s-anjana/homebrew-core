@@ -1,19 +1,19 @@
 class SuiteSparse < Formula
   desc "Suite of Sparse Matrix Software"
   homepage "http://faculty.cse.tamu.edu/davis/suitesparse.html"
-  url "https://github.com/DrTimothyAldenDavis/SuiteSparse/archive/v5.7.1.tar.gz"
-  sha256 "5ba5add1663d51a1b6fb128b50fe869b497f3096765ff7f8212f0ede044b9557"
+  url "https://github.com/DrTimothyAldenDavis/SuiteSparse/archive/v5.8.0.tar.gz"
+  sha256 "94a9b7134eb4dd82b97f1a22a6b464feb81e73af2dcdf683c6f252285191df1d"
 
   bottle do
-    cellar :any
-    sha256 "9d6feb2e2feb55df212703fd30a766676fa9e71f0ed9bdff49a120b9fe60396d" => :catalina
-    sha256 "ce6d357d71455dc59dec5ec7e9739c6f8b6d981c6c0359eaf78df1308b0f246d" => :mojave
-    sha256 "cb174cb7a53753f331d52422cf548262d014b26f7d50c0a13ff1141195b7d922" => :high_sierra
+    sha256 "071121481c6eca597812a7b41a4bdf11d334e5d5a3d400b30f685425fb3d3889" => :catalina
+    sha256 "28ab445631aec4a86e477a9664c1610e49146add9fc673cfb9528f0c4c1d11a3" => :mojave
+    sha256 "161c178cdb17f0ac05e8376756262d8c8e0bd4092b99bac0b45f15d187bd6cd7" => :high_sierra
   end
 
   depends_on "cmake" => :build
   depends_on "metis"
   depends_on "openblas"
+  depends_on "tbb"
 
   uses_from_macos "m4"
 

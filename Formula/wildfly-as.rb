@@ -1,9 +1,8 @@
 class WildflyAs < Formula
   desc "Managed application runtime for building applications"
   homepage "https://wildfly.org/"
-  url "https://download.jboss.org/wildfly/18.0.1.Final/wildfly-18.0.1.Final.tar.gz"
-  sha256 "54498e9c16b29c7f0a2cbab91edab6dfb9e2002259ee07c6d1247c23dc0cbb6c"
-  revision 1
+  url "https://download.jboss.org/wildfly/20.0.1.Final/wildfly-20.0.1.Final.tar.gz"
+  sha256 "63ced690c05149f444e8d0418c1d76ab82941d1e3763ef4c49b0c43de5f95ae7"
 
   bottle :unneeded
 
@@ -67,9 +66,7 @@ class WildflyAs < Formula
     ENV["JBOSS_HOME"] = opt_libexec
     system "#{opt_libexec}/bin/standalone.sh --version | grep #{version}"
 
-    server = TCPServer.new(0)
-    port = server.addr[1]
-    server.close
+    port = free_port
 
     pidfile = testpath/"pidfile"
     ENV["LAUNCH_JBOSS_IN_BACKGROUND"] = "true"

@@ -1,28 +1,22 @@
 class Benthos < Formula
   desc "Stream processor for mundane tasks written in Go"
   homepage "https://www.benthos.dev"
-  url "https://github.com/Jeffail/benthos/archive/v3.11.0.tar.gz"
-  sha256 "864023b1152a527b75092317bc468506bbed4f118df03b786ae2999c9706af87"
+  url "https://github.com/Jeffail/benthos/archive/v3.20.0.tar.gz"
+  sha256 "2765b49c8ea364e9085b5f6b484b21d8bb4b1974715e164a92d543098df6fdd5"
+  license "MIT"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "d03c075aaa4466af2392b2c9f49855654eedc6381d4b3ba404e4a8de0776d12a" => :catalina
-    sha256 "1a529c326b86c075f3a95e9dc5e3cd0c4960c736235270f01c708f3a2fffa89b" => :mojave
-    sha256 "dc05481effbf7e4b05f3cfda297fb35cb6f2ad2d7ef78208f36ce34c05747435" => :high_sierra
+    sha256 "90dc8a58e7b02e75ecb587a639a9f4c246700c87086eadfbb6ea83c8645faeac" => :catalina
+    sha256 "ee9dcf0b3820ef7241ddad29fda38114abd3dd3bb8009c81291b3cad08991a0a" => :mojave
+    sha256 "aaeb4398e590ae40409e626b79bde87be24527f532178d2e2cffa7bca2f5e83e" => :high_sierra
   end
 
   depends_on "go" => :build
 
   def install
-    ENV["GOPATH"] = buildpath
-
-    src = buildpath/"src/github.com/Jeffail/benthos"
-    src.install buildpath.children
-    src.cd do
-      system "make", "VERSION=#{version}"
-      bin.install "target/bin/benthos"
-      prefix.install_metafiles
-    end
+    system "make", "VERSION=#{version}"
+    bin.install "target/bin/benthos"
   end
 
   test do
@@ -43,7 +37,7 @@ class Benthos < Formula
         processors:
          - type: decode
            decode:
-           scheme: base64
+             scheme: base64
       output:
         type: stdout
     EOS

@@ -1,27 +1,29 @@
+require "language/node"
+
 class Emscripten < Formula
   desc "LLVM bytecode to JavaScript compiler"
   homepage "https://emscripten.org/"
 
   stable do
-    url "https://github.com/emscripten-core/emscripten/archive/1.39.10.tar.gz"
-    sha256 "63c40e3c01eb416d48f1d46b7a180f7fcac67bd6cef23999457a1a6f9c7ba645"
+    url "https://github.com/emscripten-core/emscripten/archive/1.39.19.tar.gz"
+    sha256 "79b08df6d067eb2e00c2e228c3c965a3ae82cd395b50c3c68fa4dfc8ec977f0b"
 
     resource "fastcomp" do
-      url "https://github.com/emscripten-core/emscripten-fastcomp/archive/1.39.10.tar.gz"
-      sha256 "12335fcdbaca1d13fb48b754cd34c1b0d641208bc26b9716d2d15132980b1a84"
+      url "https://github.com/emscripten-core/emscripten-fastcomp/archive/1.39.19.tar.gz"
+      sha256 "392c946b87c1a9c8c1566c3a10a704af3ec17f38fbada8400867774cf8c962c7"
     end
 
     resource "fastcomp-clang" do
-      url "https://github.com/emscripten-core/emscripten-fastcomp-clang/archive/1.39.10.tar.gz"
-      sha256 "d9f6be46eb7fbd34b55cdf55f24d88a207bff0e2a3d14e50a184723ec5071604"
+      url "https://github.com/emscripten-core/emscripten-fastcomp-clang/archive/1.39.19.tar.gz"
+      sha256 "e1944b483c9cc402b65b8cf5542b81dfb8e1c40867040e9ea146b590c84cd9f9"
     end
   end
 
   bottle do
     cellar :any
-    sha256 "2bc9f9f717a831304ea899dd0fcd4ddf91fb24a14cc48887706c7e46ba12e49c" => :catalina
-    sha256 "e9e21e75970ddb6580d4d55587354359f038c703fc4b6dfe0f08350cff1d81a6" => :mojave
-    sha256 "ca9bfa9a945f817ff84b9f6a3488c3d1cff7128ef2c4cd02e0eda409ed2546a7" => :high_sierra
+    sha256 "21f478110ddb7dbfac27e9e073a99cd087e6e0b33675e9e2f4dcd2abe6f83161" => :catalina
+    sha256 "dd3a2eb8f689756d207c8816c9cfeac093592008dfe177418a38e65438ddd660" => :mojave
+    sha256 "ccc10cbdc88311369923b9fd1362a27087a90c3dae54112a55e88d545cfbfcb1" => :high_sierra
   end
 
   head do
@@ -39,7 +41,7 @@ class Emscripten < Formula
   depends_on "cmake" => :build
   depends_on "binaryen"
   depends_on "node"
-  depends_on "python"
+  depends_on "python@3.8"
   depends_on "yuicompressor"
 
   def install
@@ -71,9 +73,14 @@ class Emscripten < Formula
       system "make", "install"
     end
 
+    cd libexec do
+      system "npm", "install", *Language::Node.local_npm_install_args
+      rm_f "node_modules/ws/builderror.log" # Avoid references to Homebrew shims
+    end
+
     %w[em++ em-config emar emcc emcmake emconfigure emlink.py emmake
        emranlib emrun emscons].each do |emscript|
-      bin.install_symlink libexec/emscript
+      (bin/emscript).write_env_script libexec/emscript, :PYTHON => Formula["python@3.8"].opt_bin/"python3"
     end
   end
 

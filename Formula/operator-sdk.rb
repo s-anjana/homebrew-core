@@ -2,14 +2,16 @@ class OperatorSdk < Formula
   desc "SDK for building Kubernetes applications"
   homepage "https://coreos.com/operators/"
   url "https://github.com/operator-framework/operator-sdk.git",
-      :tag      => "v0.15.2",
-      :revision => "ffaf278993c8fcb00c6f527c9f20091eb8dd3352"
+      :tag      => "v0.18.2",
+      :revision => "f059b5e17447b0bbcef50846859519340c17ffad"
+  license "Apache-2.0"
   head "https://github.com/operator-framework/operator-sdk.git"
 
   bottle do
-    sha256 "74fc28d3b3bad299874ede029ff792cf26d16271759b8f9cfc8bcf5cd13c0db2" => :catalina
-    sha256 "c7279aa1f3abf765f478485ca898db236297141fc26d1981e47ea1c081dccbda" => :mojave
-    sha256 "24a6391a7c9f7b36224f85a30c35f14957b24eceffffd25220899e5f0677e906" => :high_sierra
+    rebuild 1
+    sha256 "5b645526d83936c9b13eb77bdc5be0a28d299ddd70b8024a88848cfc20fde94c" => :catalina
+    sha256 "04379c383bbb7bbe2bdc4517c7fedd865ff2fef97a95d5e70532a3f04f7d8545" => :mojave
+    sha256 "9fee5fc8872a25065bb32febe4e4cb7fd8130242833a7a37c123e7f05b529c4e" => :high_sierra
   end
 
   depends_on "go"
@@ -29,11 +31,11 @@ class OperatorSdk < Formula
       bin.install buildpath/"bin/operator-sdk"
 
       # Install bash completion
-      output = Utils.popen_read("#{bin}/operator-sdk completion bash")
+      output = Utils.safe_popen_read("#{bin}/operator-sdk", "completion", "bash")
       (bash_completion/"operator-sdk").write output
 
       # Install zsh completion
-      output = Utils.popen_read("#{bin}/operator-sdk completion zsh")
+      output = Utils.safe_popen_read("#{bin}/operator-sdk", "completion", "zsh")
       (zsh_completion/"_operator-sdk").write output
 
       prefix.install_metafiles

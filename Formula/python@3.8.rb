@@ -1,13 +1,14 @@
 class PythonAT38 < Formula
   desc "Interpreted, interactive, object-oriented programming language"
   homepage "https://www.python.org/"
-  url "https://www.python.org/ftp/python/3.8.2/Python-3.8.2.tar.xz"
-  sha256 "2646e7dc233362f59714c6193017bb2d6f7b38d6ab4a0cb5fbac5c36c4d845df"
+  url "https://www.python.org/ftp/python/3.8.3/Python-3.8.3.tar.xz"
+  sha256 "dfab5ec723c218082fe3d5d7ae17ecbdebffa9a1aea4d64aa3a2ecdd2e795864"
+  revision 1
 
   bottle do
-    sha256 "4bd9406b5d69313fcef3e572f85398ff9d7e2ab34eaf40c087bd0b4e87439ea8" => :catalina
-    sha256 "511b4f2c3993f000516938ed0700936c8a7d8c054b5171fa733ac7d344291c30" => :mojave
-    sha256 "86652428afa471b42ddba7028de02767d933f35f55e538b362c9cc219e972405" => :high_sierra
+    sha256 "142f7ace3f1d12472569e89eaab40526604ea4011dcfc02ecc362e7e9f1cafba" => :catalina
+    sha256 "f82b79eabc6546155997cecc9c62a8bebba6bc8b138952235b894ea5141ec7ce" => :mojave
+    sha256 "39812747f7248f24f3c061f9b9206bd0418341d95fcefad648d3ee5e938c9e58" => :high_sierra
   end
 
   # setuptools remembers the build flags python is built with and uses them to
@@ -20,8 +21,6 @@ class PythonAT38 < Formula
     EOS
     satisfy { MacOS::CLT.installed? }
   end
-
-  keg_only :versioned_formula
 
   depends_on "pkg-config" => :build
   depends_on "gdbm"
@@ -40,6 +39,20 @@ class PythonAT38 < Formula
   skip_clean "bin/easy_install3", "bin/easy_install-3.4", "bin/easy_install-3.5", "bin/easy_install-3.6",
              "bin/easy_install-3.7", "bin/easy_install-3.8"
 
+  link_overwrite "bin/2to3"
+  link_overwrite "bin/idle3"
+  link_overwrite "bin/pip3"
+  link_overwrite "bin/pydoc3"
+  link_overwrite "bin/python3"
+  link_overwrite "bin/python3-config"
+  link_overwrite "bin/wheel3"
+  link_overwrite "share/man/man1/python3.1"
+  link_overwrite "lib/pkgconfig/python3.pc"
+  link_overwrite "Frameworks/Python.framework/Headers"
+  link_overwrite "Frameworks/Python.framework/Python"
+  link_overwrite "Frameworks/Python.framework/Resources"
+  link_overwrite "Frameworks/Python.framework/Versions/Current"
+
   resource "setuptools" do
     url "https://files.pythonhosted.org/packages/df/ed/bea598a87a8f7e21ac5bbf464102077c7102557c07db9ff4e207bd9f7806/setuptools-46.0.0.zip"
     sha256 "2f00f25b780fbfd0787e46891dcccd805b08d007621f24629025f48afef444b5"
@@ -53,6 +66,34 @@ class PythonAT38 < Formula
   resource "wheel" do
     url "https://files.pythonhosted.org/packages/75/28/521c6dc7fef23a68368efefdcd682f5b3d1d58c2b90b06dc1d0b805b51ae/wheel-0.34.2.tar.gz"
     sha256 "8788e9155fe14f54164c1b9eb0a319d98ef02c160725587ad60f14ddc57b6f96"
+  end
+
+  # Remove for > 3.8.3
+  # Upstream commit from 2020-06-25 "Support macOS 11 when building"
+  patch do
+    url "https://github.com/python/cpython/commit/8ea6353.patch?full_index=1"
+    sha256 "c47680c85f201f5830bf71741f09ece031b99386040f3c70b20190b4c47fb81d"
+  end
+
+  # Remove this block when upstream adds arm64 compatibility
+  if Hardware::CPU.arm?
+    # Upstream PR #21114, "Support `arm64` in Mac/Tools/pythonw"
+    patch do
+      url "https://github.com/python/cpython/pull/21114.patch?full_index=1"
+      sha256 "a50ddeb9f3a51277c935d681a4607f6e73c0817ec7a10c5e77bc8389814ccb19"
+    end
+
+    # Upstream PR #21224, "allow python to build for macosx-11.0-arm64"
+    patch do
+      url "https://github.com/python/cpython/pull/21224.patch?full_index=1"
+      sha256 "2a02ad3412a3f41cd67ae26a20f70ffd42dd15ef6791f8c8ef86129572e8f1d7"
+    end
+
+    # Upstream PR #21249, "ctypes fixes for arm64 Mac OS"
+    patch do
+      url "https://github.com/python/cpython/pull/21249.patch?full_index=1"
+      sha256 "11923d4a249da7b050cc2093bd9d4547dcdfbf61718b20896e8b6447e1967cb3"
+    end
   end
 
   def install

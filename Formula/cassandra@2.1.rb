@@ -15,7 +15,7 @@ class CassandraAT21 < Formula
 
   keg_only :versioned_formula
 
-  uses_from_macos "python@2" # does not support Python 3
+  depends_on :macos # Due to Python 2 (does not support Python 3)
 
   # Only Yosemite has new enough setuptools for successful compile of the below deps.
   resource "setuptools" do

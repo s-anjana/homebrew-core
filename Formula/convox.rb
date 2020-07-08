@@ -1,39 +1,28 @@
 class Convox < Formula
-  desc "Command-line interface for the Rack PaaS on AWS"
+  desc "Command-line interface for the Convox PaaS"
   homepage "https://convox.com/"
-  url "https://github.com/convox/rack/archive/20200302115619.tar.gz"
-  sha256 "850c2e468273bb2b9b42a144b97477d777e31c1554ab514606072c3cf64b3536"
+  url "https://github.com/convox/convox/archive/3.0.27.tar.gz"
+  sha256 "dc26bae1056745c8b1dc15c220f349116523a9635ab9530515c524bdd2dbf1ec"
+  license "Apache-2.0"
+  version_scheme 1
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "d14ea503227afd3e9d282da425cdbf05a0f6ffcd35b64e32ac8c0eae811015dd" => :catalina
-    sha256 "1dda147d1c038555e10980ae23a89ef9c639827420c9a1b4645992d5786ac893" => :mojave
-    sha256 "20bd6147a0bff746304784a96539aaa06cb5458ddfe41990d5be68b7c759f93a" => :high_sierra
+    sha256 "6db4cb92ddf1e602ae01171f9d7d289d8697ececd5ecbfeca0d25384bbbcd418" => :catalina
+    sha256 "8ec2a8fc080212c2037bef572f65347e753e3dad0049daa44b47a494cbf339f9" => :mojave
+    sha256 "51d980146bb1c47f67ff93aeff244a669b8b3b426450a51d18e60ce480aadfd9" => :high_sierra
   end
 
   depends_on "go" => :build
 
-  resource "packr" do
-    url "https://github.com/gobuffalo/packr/archive/v2.0.1.tar.gz"
-    sha256 "cc0488e99faeda4cf56631666175335e1cce021746972ce84b8a3083aa88622f"
-  end
-
   def install
-    ENV["GOPATH"] = buildpath
-
-    (buildpath/"src/github.com/convox/rack").install Dir["*"]
-
-    resource("packr").stage { system "go", "install", "./packr" }
-    cd buildpath/"src/github.com/convox/rack" do
-      system buildpath/"bin/packr"
-    end
-
-    system "go", "build", "-ldflags=-X main.version=#{version}",
-           "-o", bin/"convox", "-v", "github.com/convox/rack/cmd/convox"
+    system "go", "build", "-mod=vendor", "-ldflags=-X main.version=#{version}",
+            "-o", bin/"convox", "-v", "./cmd/convox"
     prefix.install_metafiles
   end
 
   test do
-    system bin/"convox"
+    assert_equal "Authenticating with localhost... ERROR: invalid login\n",
+      shell_output("#{bin}/convox login -t invalid localhost 2>&1", 1)
   end
 end

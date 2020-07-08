@@ -1,27 +1,37 @@
 class X264 < Formula
   desc "H.264/AVC encoder"
   homepage "https://www.videolan.org/developers/x264.html"
-  revision 1
+  license "GPL-2.0"
   head "https://code.videolan.org/videolan/x264.git"
 
   stable do
     # the latest commit on the stable branch
     url "https://code.videolan.org/videolan/x264.git",
-        :revision => "0a84d986e7020f8344f00752e3600b9769cc1e85"
-    version "r2917"
+        :revision => "cde9a93319bea766a92e306d69059c76de970190"
+    version "r3011"
   end
 
   bottle do
     cellar :any
-    rebuild 1
-    sha256 "9e49fa8cc8e0bd02bdb85f8b2def682a8c6aab5d3f7bfe6bb51e2e78da1b2eb9" => :catalina
-    sha256 "07d6a4de866c38296a3cb788c3370857bd745e88cd7e1723fc0261c4e44a1081" => :mojave
-    sha256 "80b6d49faed147546c8639bdc09143968587d7fed7c45dcd9c4e0f56cdb932ff" => :high_sierra
+    sha256 "0f3e8fbc5399231cc48770114071190d8fc7c598aedde207ee11eabce5e32b19" => :catalina
+    sha256 "5d1392936e7a8ca6008e918d876eb0851c0357d1b7f40b9417c147448dcb9fc2" => :mojave
+    sha256 "fa6457de45c2d97b1b258a11bfb5c1b2b36427ecc82ddb76c50db685b620adb3" => :high_sierra
   end
 
   depends_on "nasm" => :build
 
+  if MacOS.version <= :high_sierra
+    # Stack realignment requires newer Clang
+    # https://code.videolan.org/videolan/x264/-/commit/b5bc5d69c580429ff716bafcd43655e855c31b02
+    depends_on "gcc"
+    fails_with :clang
+  end
+
   def install
+    # Work around Xcode 11 clang bug
+    # https://bitbucket.org/multicoreware/x265/issues/514/wrong-code-generated-on-macos-1015
+    ENV.append_to_cflags "-fno-stack-check" if DevelopmentTools.clang_build_version >= 1010
+
     args = %W[
       --prefix=#{prefix}
       --disable-lsmash

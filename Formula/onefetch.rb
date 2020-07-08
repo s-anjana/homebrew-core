@@ -3,6 +3,7 @@ class Onefetch < Formula
   homepage "https://github.com/o2sh/onefetch"
   url "https://github.com/o2sh/onefetch/archive/v2.2.0.tar.gz"
   sha256 "99e00a760670ac3e8653762fe690f37ce8214470d2887c37aeb778c2c1344734"
+  license "MIT"
 
   bottle do
     cellar :any_skip_relocation
@@ -16,7 +17,7 @@ class Onefetch < Formula
   uses_from_macos "zlib"
 
   def install
-    system "cargo", "install", "--locked", "--root", prefix, "--path", "."
+    system "cargo", "install", *std_cargo_args
   end
 
   test do

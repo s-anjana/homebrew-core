@@ -1,15 +1,16 @@
 class Lf < Formula
   desc "Terminal file manager"
   homepage "https://godoc.org/github.com/gokcehan/lf"
-  url "https://github.com/gokcehan/lf/archive/r13.tar.gz"
-  sha256 "fe99ed9785fbdc606835139c0c52c854b32b1f1449ba83567a115b21d2e882f4"
+  url "https://github.com/gokcehan/lf/archive/r14.tar.gz"
+  sha256 "5266afa808f4612733af65289024c9eb182864f6a224fdfdf58f405a30c79644"
+  license "MIT"
+  revision 1
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "86added59852eebeeea8152ed69feb042f6f4ccc1ca998e3df6ca1629f746fe7" => :catalina
-    sha256 "ad4cfc498d617d41c02b9482c0411b8048d7eaa934cfed114861555de742cf7c" => :mojave
-    sha256 "e25cfc6246e04b13e90260433cf1fc27a28af17b82ac7d6bb93e09123faa4f61" => :high_sierra
-    sha256 "49a61cf93df5beac903c441087755cc81a4062bcd6f4665aa678cbf21e5c286b" => :sierra
+    sha256 "d53611f5c7f78e947eeed932abd4cd64591b416815043e62c971257f1d300cd7" => :catalina
+    sha256 "9d08c5d7c877993c3a47108fa36f27290c16fd92e198aaff4ab8494a92337f8a" => :mojave
+    sha256 "6d4f60d4005731fa3c0851caed566add13a11899271523c6815f88b0907e8c1c" => :high_sierra
   end
 
   depends_on "go" => :build
@@ -21,6 +22,9 @@ class Lf < Formula
     cd "src/github.com/gokcehan/lf" do
       system "./gen/build.sh", "-o", bin/"lf"
       prefix.install_metafiles
+      man1.install "lf.1"
+      zsh_completion.install "etc/lf.zsh" => "_lf"
+      fish_completion.install "etc/lf.fish"
     end
   end
 

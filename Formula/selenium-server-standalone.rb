@@ -51,22 +51,14 @@ class SeleniumServerStandalone < Formula
   end
 
   test do
-    port = 4444
-    pid = fork do
-      exec "#{bin}/selenium-server -port #{port}"
-    end
+    port = free_port
+    fork { exec "#{bin}/selenium-server -port #{port}" }
     sleep 3
+    output = shell_output("curl --silent localhost:#{port}/wd/hub/status")
+    output = JSON.parse(output)
 
-    begin
-      output = shell_output("curl --silent localhost:4444/wd/hub/status")
-      output = JSON.parse(output)
-
-      assert_equal 0, output["status"]
-      assert_true output["value"]["ready"]
-      assert_equal version, output["value"]["build"]["version"]
-    ensure
-      Process.kill("SIGINT", pid)
-      Process.wait(pid)
-    end
+    assert_equal 0, output["status"]
+    assert_true output["value"]["ready"]
+    assert_equal version, output["value"]["build"]["version"]
   end
 end

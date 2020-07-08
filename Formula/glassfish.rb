@@ -37,16 +37,14 @@ class Glassfish < Formula
     domaindir_arg = "--domaindir=#{domains_path}"
 
     # tell glassfish to use Java 8
-    java8_home = Utils.popen_read(Language::Java.java_home_cmd("1.8")).chomp
+    java8_home = Language::Java.java_home("1.8")
     File.open(asenv_conf_path, "a") { |file| file.puts "AS_JAVA=\"#{java8_home}\"" }
 
-    server = TCPServer.new(0)
-    port = server.addr[1]
-    server.close
+    port = free_port
 
     # assign port to glassfish admin console
     text = File.read(domain_xml_path)
-    new_contents = text.gsub(/port\=\"4848\"/, "port=\"#{port}\"")
+    new_contents = text.gsub(/port="4848"/, "port=\"#{port}\"")
     File.open(domain_xml_path, "w") { |file| file.puts new_contents }
 
     fork do

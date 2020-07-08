@@ -1,10 +1,9 @@
 class Solr < Formula
   desc "Enterprise search platform from the Apache Lucene project"
   homepage "https://lucene.apache.org/solr/"
-  url "https://www.apache.org/dyn/closer.lua?path=lucene/solr/8.4.1/solr-8.4.1.tgz"
-  mirror "https://archive.apache.org/dist/lucene/solr/8.4.1/solr-8.4.1.tgz"
-  sha256 "ec39e1e024b2e37405149de41e39e875a39bf11a53f506d07d96b47b8d2a4301"
-  revision 2
+  url "https://www.apache.org/dyn/closer.lua?path=lucene/solr/8.5.2/solr-8.5.2.tgz"
+  mirror "https://archive.apache.org/dist/lucene/solr/8.5.2/solr-8.5.2.tgz"
+  sha256 "c457d6c7243241cad141e1df34c6f669d58a6c60e537f4217d032616dd066dcf"
 
   bottle :unneeded
 
@@ -59,11 +58,7 @@ class Solr < Formula
   end
 
   test do
-    require "socket"
-
-    server = TCPServer.new(0)
-    port = server.addr[1]
-    server.close
+    port = free_port
 
     # Info detects no Solr node => exit code 3
     shell_output(bin/"solr -i", 3)

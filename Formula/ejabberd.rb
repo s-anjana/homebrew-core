@@ -1,14 +1,16 @@
 class Ejabberd < Formula
   desc "XMPP application server"
   homepage "https://www.ejabberd.im"
-  url "https://www.process-one.net/downloads/ejabberd/20.02/ejabberd-20.02.tgz"
-  sha256 "70d3f1f11ee1d68de7944b879fd502595a4b64e379073986ae5613f774a9d0b9"
+  url "https://static.process-one.net/ejabberd/downloads/20.04/ejabberd-20.04.tgz"
+  sha256 "130673a835a9768a47c78c6bfe9c622a3b5916dd8aaf12aad0acd2d0f7f3a5cf"
+  license "GPL-2.0"
+  revision 1
 
   bottle do
     cellar :any
-    sha256 "aa28c86c26a48f1e5bf1138add19cdbb8b6b07a5fab9e3d35beda6969aa9b020" => :catalina
-    sha256 "d5dd3cd458519ee5f531c5000e308112f5ad1366fc7c250260db5c3628393c8f" => :mojave
-    sha256 "68e0a18b7a0cb4a3a9952f1698f91cd071ebca3660f8c62c42b3b81750be7501" => :high_sierra
+    sha256 "7e50060f5ad3a6d7c55db410eb3762b2a95c5bd2fd296f31729b1393ceb5edcd" => :catalina
+    sha256 "6bc2b55c5d2c46703937ade4be7b8c6cce8bd32bd5f7119f084a7497f647434d" => :mojave
+    sha256 "31250e200d52ba9b03bcc4d699e74b868eb357391b4ac4864f765a87c9e77868" => :high_sierra
   end
 
   head do
@@ -18,10 +20,12 @@ class Ejabberd < Formula
     depends_on "automake" => :build
   end
 
-  depends_on "erlang"
+  depends_on "erlang@22"
   depends_on "gd"
   depends_on "libyaml"
   depends_on "openssl@1.1"
+
+  conflicts_with "couchdb", :because => "both install `jiffy` lib"
 
   def install
     ENV["TARGET_DIR"] = ENV["DESTDIR"] = "#{lib}/ejabberd/erlang/lib/ejabberd-#{version}"

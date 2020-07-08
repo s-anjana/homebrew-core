@@ -3,13 +3,12 @@ class Dwdiff < Formula
   homepage "https://os.ghalkes.nl/dwdiff.html"
   url "https://os.ghalkes.nl/dist/dwdiff-2.1.2.tar.bz2"
   sha256 "3201fd459164ebbb538a0b21ce17d955f2fa3babe37367b2e92f7f912cfac692"
-  revision 2
+  revision 4
 
   bottle do
-    sha256 "0284ddb2eea8d4ee99282789a9bcbd74fdcc3c8904241bee8d6454d9b05fd295" => :catalina
-    sha256 "e372fe9603318c6cbd8fb293a2e28d7852e1681726406c59f8da0a009898d596" => :mojave
-    sha256 "f0e1fe3b2edff2e1320125202ee8fd4e534249842857f1804c2e2c8c64fe6aea" => :high_sierra
-    sha256 "744b1409f1d34a225330cfc3d05b50a973c6d4cfca4ab0770f64c7a4b485b13b" => :sierra
+    sha256 "bcd9a244e1855e0d51de758eef3ca5d0307bf48d85aa1cd5531637da7c5afe81" => :catalina
+    sha256 "262f973322cb05d0e447d2bd6c61a70d7034cefeeb903b699da7532056b75482" => :mojave
+    sha256 "a28c680add3cd73c806780a1407cb0f97ec45a07df08bd647079eb43aa96b9bf" => :high_sierra
   end
 
   depends_on "pkg-config" => :build

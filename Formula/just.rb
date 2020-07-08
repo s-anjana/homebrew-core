@@ -1,20 +1,20 @@
 class Just < Formula
   desc "Handy way to save and run project-specific commands"
   homepage "https://github.com/casey/just"
-  url "https://github.com/casey/just/archive/v0.5.8.tar.gz"
-  sha256 "f0d3363f7e7604aeb355fe631421bccddb458756b5d951b25c071aa38d3e72a7"
+  url "https://github.com/casey/just/archive/v0.6.1.tar.gz"
+  sha256 "3707b202a16bc4541cccb26316bc13b3b3853055c47a7a50e7a0e64dca33062a"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "68540657a8a367784b2618c99e49031b471b76f442eb1f2ffd8908701b770462" => :catalina
-    sha256 "e0b3d06a1f4076431c63e8115b02eb5db7b6db89d6f7e6c7af6af03ae2c76d93" => :mojave
-    sha256 "cdc95df17fa3dc216df56e802cb87a6009faa57358b5a9521dd0df6f02831392" => :high_sierra
+    sha256 "f059c7de861f0535890893627ea4b55460cc87b426d3b463acc0769b9dc1fbdb" => :catalina
+    sha256 "bfa8b1e92a14768ac366411dd78fba441bd13843b11b8199633a0705b115128a" => :mojave
+    sha256 "f29b4e5b9ad9e4ae72963956293b61b2b7c0f1d01703cc1c57f53486cd4bedce" => :high_sierra
   end
 
   depends_on "rust" => :build
 
   def install
-    system "cargo", "install", "--locked", "--root", prefix, "--path", "."
+    system "cargo", "install", *std_cargo_args
   end
 
   test do

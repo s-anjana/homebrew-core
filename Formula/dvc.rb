@@ -3,24 +3,24 @@ class Dvc < Formula
 
   desc "Git for data science projects"
   homepage "https://dvc.org"
-  url "https://github.com/iterative/dvc/archive/0.89.0.tar.gz"
-  sha256 "5b419483d084cbf44aece02e0ae0e3ec168939b18d311f49ca5d2cd3f90bb44c"
+  url "https://github.com/iterative/dvc/archive/1.1.7.tar.gz"
+  sha256 "d38ae17fb75f8b7be62d6f67899638bdde5a17163871fba82e94e2b4ce3f4f78"
+  license "Apache-2.0"
 
   bottle do
     cellar :any
-    sha256 "43c387eee1a1c2bf5d7131d4e48080574899d6bacda8b8175f3f4598f60f9069" => :catalina
-    sha256 "105edc7ae5d80119dac38064663fe284dae3b1e3e2b44ff6605b0cfd5b07c1ee" => :mojave
-    sha256 "32b3842170e748b7e9782fbae908425193560bfdb8f22fe1eec80fbdb312e317" => :high_sierra
+    sha256 "49c2319658e931d5e95e5977c33987969755e28a1c620e85bc3c6cb3542c0032" => :catalina
+    sha256 "6d8daeebe1d116ddadae7fb7a8f536138015290555b048eb999a25e8f30b315a" => :mojave
+    sha256 "eee6ea1f44d46642ddb7068b9cfce0abc1be745f3db5790a4a8fd0946e48352e" => :high_sierra
   end
 
   depends_on "pkg-config" => :build
   depends_on "apache-arrow"
   depends_on "openssl@1.1"
-  # `apache-arrow` currently depends on Python 3.7
-  depends_on "python"
+  depends_on "python@3.8"
 
   def install
-    venv = virtualenv_create(libexec, "python3")
+    venv = virtualenv_create(libexec, Formula["python@3.8"].opt_bin/"python3")
 
     system libexec/"bin/pip", "install",
       "--no-binary", ":all:",
@@ -49,11 +49,11 @@ class Dvc < Formula
 
     venv.pip_install_and_link buildpath
 
-    bash_completion.install "scripts/completion/dvc.bash" => "dvc"
-    zsh_completion.install "scripts/completion/dvc.zsh"
+    (bash_completion/"dvc").write `#{bin}/dvc completion -s bash`
+    (zsh_completion/"_dvc").write `#{bin}/dvc completion -s zsh`
   end
 
   test do
-    system "#{bin}/dvc", "--version"
+    system "#{bin}/dvc", "version"
   end
 end

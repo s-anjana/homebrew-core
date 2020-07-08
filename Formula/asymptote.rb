@@ -1,23 +1,24 @@
 class Asymptote < Formula
   desc "Powerful descriptive vector graphics language"
   homepage "https://asymptote.sourceforge.io"
-  url "https://downloads.sourceforge.net/project/asymptote/2.64/asymptote-2.64.src.tgz"
-  sha256 "8091fe58e8a7eb42dd7c697e5632cfbc1532c0bbf6d5016a755db44fe7af96f4"
+  url "https://downloads.sourceforge.net/project/asymptote/2.66/asymptote-2.66.src.tgz"
+  sha256 "a2605bdec8cbf3f87b84f51860abeb7e5c1073572a54f5489d124b8786d84cd0"
+  license "GPL-3.0"
 
   bottle do
-    sha256 "f9533fe2de225a68b658fe63e382ee52e335875cfbddf7b7ca641ad226615338" => :catalina
-    sha256 "1c2ccd8c1686f5af101412ac87f81213d7294f2f97e0939307af52aa870a2b37" => :mojave
-    sha256 "164c6a5ed383dbd4c7ceee488ebc1623e65faefcba8090a6a07619c8f8488eb4" => :high_sierra
+    sha256 "dc6d4f13df8030bb0cd0040cd6372af6f0bd7b94cb369821b73d5cb3d996b91f" => :catalina
+    sha256 "1c2d88dfbe123512db773d1499a8e21d4c759ce72099ce02c30f7f46be8a3b41" => :mojave
+    sha256 "2314a6f120bdeef1e01083c501edc4d5519cf6e0e4ebe805bb3dc6f17bc7c66c" => :high_sierra
   end
 
+  depends_on "glm" => :build
   depends_on "fftw"
   depends_on "ghostscript"
-  depends_on "glm"
   depends_on "gsl"
 
   resource "manual" do
-    url "https://downloads.sourceforge.net/project/asymptote/2.64/asymptote.pdf"
-    sha256 "53c83d06bb22db555f162d92a15ec6a6941b2db4ce504dae15cabd81e899d87f"
+    url "https://downloads.sourceforge.net/project/asymptote/2.65/asymptote.pdf"
+    sha256 "9a3aafacab8e09ca677972321d04c3fe9a335adad960e5f22ab30ab5fb82b705"
   end
 
   def install

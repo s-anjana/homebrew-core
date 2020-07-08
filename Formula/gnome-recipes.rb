@@ -3,19 +3,18 @@ class GnomeRecipes < Formula
   homepage "https://wiki.gnome.org/Apps/Recipes"
   url "https://download.gnome.org/sources/gnome-recipes/2.0/gnome-recipes-2.0.2.tar.xz"
   sha256 "1be9d2fcb7404a97aa029d2409880643f15071c37039247a6a4320e7478cd5fb"
-  revision 10
+  revision 13
 
   bottle do
-    sha256 "1bd7f5d9f6adb0f4855ff1ae2d1d6a024f1d635f064dc86407a4088a8109f749" => :catalina
-    sha256 "1f49413fbb54652d11ea480a68b45261941cc1827b30f660941da423d07391f7" => :mojave
-    sha256 "b6cab9caf039f7b99591e2c0f15c5bc90b6e62eb0bf9ad4adf66b69bf8359ace" => :high_sierra
+    sha256 "a6f88d7b457fdd95336a608e43e8bcc13af68dcf3c35c41b398d2aa867a65a27" => :catalina
+    sha256 "ebf73b933f00c8aa705f72a33cee9f72679563896c33509d705a3efe04d2a4e8" => :mojave
+    sha256 "eb8410b2a27097f646a3e75810a5a21b04f76aee9e0fb393af2f7d4f2df32ea9" => :high_sierra
   end
 
   depends_on "itstool" => :build
   depends_on "meson" => :build
   depends_on "ninja" => :build
   depends_on "pkg-config" => :build
-  depends_on "python" => :build
   depends_on "adwaita-icon-theme"
   depends_on "gnome-autoar"
   depends_on "gnu-tar"
@@ -50,7 +49,7 @@ class GnomeRecipes < Formula
     ENV["DESTDIR"] = ""
     ENV.delete "PYTHONPATH"
     mkdir "build" do
-      system "meson", "--prefix=#{prefix}", ".."
+      system "meson", *std_meson_args, ".."
       system "ninja"
       system "ninja", "install"
     end

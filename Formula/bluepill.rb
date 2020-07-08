@@ -1,14 +1,16 @@
 class Bluepill < Formula
-  desc "iOS testing tool that runs UI tests using multiple simulators"
+  desc "Testing tool for iOS that runs UI tests using multiple simulators"
   homepage "https://github.com/linkedin/bluepill"
   url "https://github.com/linkedin/bluepill.git",
-    :tag => "v5.1.8", :revision => "65d4dac3772c68c3ed6c9b40f32f9184e13c7545"
+    :tag      => "v5.2.4.1",
+    :revision => "b9e87eff54470fc6dc290cfefe80fc3486a06a1a"
+  license "BSD-2-Clause"
   head "https://github.com/linkedin/bluepill.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "27d702355cc348c0ab88be40cb57fa12abbec3ee9ed980d437926e073c274a4f" => :catalina
-    sha256 "6c06e7ad31f2284667844a386cd3f196001b4365f23f3da75430f5aede13d3e5" => :mojave
+    sha256 "f026badf5c5ded4b903de74382012e9b90a7b8fc1c5745ad2552fd937714b763" => :catalina
+    sha256 "6782b815d7d64190194460589adc6d790ebf4265ceeab8f869ff915a658d0aad" => :mojave
   end
 
   depends_on :xcode => ["11.2", :build]

@@ -1,31 +1,32 @@
 class Dmd < Formula
   desc "D programming language compiler for macOS"
   homepage "https://dlang.org/"
+  license "BSL-1.0"
 
   stable do
-    url "https://github.com/dlang/dmd/archive/v2.091.0.tar.gz"
-    sha256 "bcca38f4b80b51ae0a1955dc29e6cbfaa4d01d94869ddfcacf9292898c34343a"
+    url "https://github.com/dlang/dmd/archive/v2.092.1.tar.gz"
+    sha256 "765226feaeaabcfdc5d771566af16058d51b017b8b19c5d91a3faa9c69bdd373"
 
     resource "druntime" do
-      url "https://github.com/dlang/druntime/archive/v2.091.0.tar.gz"
-      sha256 "cc8ba196b08cca04488d97d0e35c878f7351b7d8128aec90eaa312d2bd9a6af2"
+      url "https://github.com/dlang/druntime/archive/v2.092.1.tar.gz"
+      sha256 "c28a60ed4dcb7b1d0e171d45f48a5876814ca629e5359592806074fcd4609cc4"
     end
 
     resource "phobos" do
-      url "https://github.com/dlang/phobos/archive/v2.091.0.tar.gz"
-      sha256 "df9f81eecda4366adc5ca9ed31a0b4474c248544b120ff6fa3f6cb45917d8769"
+      url "https://github.com/dlang/phobos/archive/v2.092.1.tar.gz"
+      sha256 "15547631ce3cb618cc096da728746dc725d429cf0796e646c310efb21e345ce1"
     end
 
     resource "tools" do
-      url "https://github.com/dlang/tools/archive/v2.091.0.tar.gz"
-      sha256 "e5a6a67fbb60a3e3228cd9966cf5b04fcc46f3c1d82ecde67009e3d8cbbd26c6"
+      url "https://github.com/dlang/tools/archive/v2.092.1.tar.gz"
+      sha256 "8db4d21c6348fc25143d532e56f345198a384cce85c08979aca2476211e15113"
     end
   end
 
   bottle do
-    sha256 "6d8991b6f9f4098b6f82e42db2b37520be57a1cf974e134690549de42738dbbe" => :catalina
-    sha256 "a17eb5a2ebfeff82981c2a6d1df540a979a125047c2255eb2514b25a648e0cbe" => :mojave
-    sha256 "0e77e70cb888814b2edf536a5f547f4938a4c43794b6c9b7dcb2811bca2204c7" => :high_sierra
+    sha256 "90cd978b1793cea1804fc18c99c46f64966b392b634bcf3874f5a7846d264bd0" => :catalina
+    sha256 "8710eba4bf54759b19a89aef4c77188ceb1c3da9f6eef5d100986309f2bd625c" => :mojave
+    sha256 "ef79ba1e5aa6e2605dc601e5cd4618dd66854fe3813b10cabff2352877485e9d" => :high_sierra
   end
 
   head do

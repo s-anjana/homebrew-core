@@ -1,21 +1,22 @@
 class Ffmpeg < Formula
   desc "Play, record, convert, and stream audio and video"
   homepage "https://ffmpeg.org/"
-  url "https://ffmpeg.org/releases/ffmpeg-4.2.2.tar.xz"
-  sha256 "cb754255ab0ee2ea5f66f8850e1bd6ad5cac1cd855d0a2f4990fb8c668b0d29c"
-  revision 2
+  url "https://ffmpeg.org/releases/ffmpeg-4.3.tar.xz"
+  sha256 "1d0ad06484f44bcb97eba5e93c40bcb893890f9f64aeb43e46cd9bb4cbd6795d"
+  revision 3
   head "https://github.com/FFmpeg/FFmpeg.git"
 
   bottle do
-    sha256 "34e8b4424611acc2f90e27b4e1318fc3972b036231a171faa4e017a9b98b9d1b" => :catalina
-    sha256 "80582f6eac8470182df842a072e074de3624ec3f5c091aa9151c178745a06011" => :mojave
-    sha256 "afb1c2a2c38fa4d39dbd178cf5258bc3b81e805196196d24ab3676f134914cab" => :high_sierra
+    sha256 "1549c59856c9409b60b5b15b57cc2cc25f0c0e7be07e546a1bf65340bb42254b" => :catalina
+    sha256 "6ae57fae9541c578c17c7d3c3ec99d34ef24c40a05472d01e355731c8510790b" => :mojave
+    sha256 "348dce9307755763a9950f5fc7f08894179b4e63bb3df9ca79dc1a0e8d24ce41" => :high_sierra
   end
 
   depends_on "nasm" => :build
   depends_on "pkg-config" => :build
   depends_on "texi2html" => :build
   depends_on "aom"
+  depends_on "dav1d"
   depends_on "fontconfig"
   depends_on "freetype"
   depends_on "frei0r"
@@ -30,11 +31,13 @@ class Ffmpeg < Formula
   depends_on "opencore-amr"
   depends_on "openjpeg"
   depends_on "opus"
+  depends_on "rav1e"
   depends_on "rtmpdump"
   depends_on "rubberband"
   depends_on "sdl2"
   depends_on "snappy"
   depends_on "speex"
+  depends_on "srt"
   depends_on "tesseract"
   depends_on "theora"
   depends_on "webp"
@@ -44,6 +47,7 @@ class Ffmpeg < Formula
   depends_on "xz"
 
   uses_from_macos "bzip2"
+  uses_from_macos "libxml2"
   uses_from_macos "zlib"
 
   def install
@@ -61,10 +65,13 @@ class Ffmpeg < Formula
       --enable-gpl
       --enable-libaom
       --enable-libbluray
+      --enable-libdav1d
       --enable-libmp3lame
       --enable-libopus
+      --enable-librav1e
       --enable-librubberband
       --enable-libsnappy
+      --enable-libsrt
       --enable-libtesseract
       --enable-libtheora
       --enable-libvidstab
@@ -73,6 +80,7 @@ class Ffmpeg < Formula
       --enable-libwebp
       --enable-libx264
       --enable-libx265
+      --enable-libxml2
       --enable-libxvid
       --enable-lzma
       --enable-libfontconfig

@@ -2,16 +2,20 @@ class PhpAT73 < Formula
   desc "General-purpose scripting language"
   homepage "https://www.php.net/"
   # Should only be updated if the new version is announced on the homepage, https://www.php.net/
-  url "https://www.php.net/distributions/php-7.3.15.tar.xz"
-  sha256 "de7ae7cf3d1dbb2824975b26b32991dac2b732886ec22075b8c53b261b018166"
+  url "https://www.php.net/distributions/php-7.3.19.tar.xz"
+  mirror "https://fossies.org/linux/www/php-7.3.19.tar.xz"
+  sha256 "6402faa19b1a8c4317c7612632bce985684a5bbae0980a5779a4019439882422"
 
   bottle do
-    sha256 "b295b4b4e41af78c68196b98efcebe972b246e426db5158c86b2bd664d64b86a" => :catalina
-    sha256 "eee0d531ce4152f6e0cfa8c43de0965173c1c4249972ea4a12c3dc0f43a83551" => :mojave
-    sha256 "18ea5a2304edd524ad47e30672035c1b75d7158213468f3d89248655d9baea91" => :high_sierra
+    rebuild 1
+    sha256 "e7c2001ba13a28648af8402f768b152fab540b4225c2853f4c2be2ecc65980ab" => :catalina
+    sha256 "590f40c25fd1cd4153e7fec7763573263eb46f99cb98671e77e48f873a88e7f6" => :mojave
+    sha256 "8c70e4a66af0f6a9216389d221a18805337ab931283ec6c4a9c77d32bdded175" => :high_sierra
   end
 
   keg_only :versioned_formula
+
+  deprecate! :date => "2021-12-06"
 
   depends_on "httpd" => [:build, :test]
   depends_on "pkg-config" => :build
@@ -175,17 +179,18 @@ class PhpAT73 < Formula
     system "make", "install"
 
     # Allow pecl to install outside of Cellar
-    extension_dir = Utils.popen_read("#{bin}/php-config --extension-dir").chomp
+    extension_dir = Utils.safe_popen_read("#{bin}/php-config", "--extension-dir").chomp
     orig_ext_dir = File.basename(extension_dir)
     inreplace bin/"php-config", lib/"php", prefix/"pecl"
     inreplace "php.ini-development", %r{; ?extension_dir = "\./"},
       "extension_dir = \"#{HOMEBREW_PREFIX}/lib/php/pecl/#{orig_ext_dir}\""
 
     # Use OpenSSL cert bundle
+    openssl = Formula["openssl@1.1"]
     inreplace "php.ini-development", /; ?openssl\.cafile=/,
-      "openssl.cafile = \"#{etc}/openssl@1.1/cert.pem\""
+      "openssl.cafile = \"#{openssl.pkgetc}/cert.pem\""
     inreplace "php.ini-development", /; ?openssl\.capath=/,
-      "openssl.capath = \"#{etc}/openssl@1.1/certs\""
+      "openssl.capath = \"#{openssl.pkgetc}/certs\""
 
     # php 7.3 known bug
     # SO discussion: https://stackoverflow.com/a/53709484/791609
@@ -231,7 +236,7 @@ class PhpAT73 < Formula
     # Custom location for extensions installed via pecl
     pecl_path = HOMEBREW_PREFIX/"lib/php/pecl"
     ln_s pecl_path, prefix/"pecl" unless (prefix/"pecl").exist?
-    extension_dir = Utils.popen_read("#{bin}/php-config --extension-dir").chomp
+    extension_dir = Utils.safe_popen_read("#{bin}/php-config", "--extension-dir").chomp
     php_basename = File.basename(extension_dir)
     php_ext_dir = opt_prefix/"lib/php"/php_basename
 
@@ -337,14 +342,8 @@ class PhpAT73 < Formula
     assert_no_match /^snmp$/, shell_output("#{bin}/php -m"),
       "SNMP extension doesn't work reliably with Homebrew on High Sierra"
     begin
-      require "socket"
-
-      server = TCPServer.new(0)
-      port = server.addr[1]
-      server_fpm = TCPServer.new(0)
-      port_fpm = server_fpm.addr[1]
-      server.close
-      server_fpm.close
+      port = free_port
+      port_fpm = free_port
 
       expected_output = /^Hello world!$/
       (testpath/"index.php").write <<~EOS

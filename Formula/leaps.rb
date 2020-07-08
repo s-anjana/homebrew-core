@@ -4,6 +4,7 @@ class Leaps < Formula
   url "https://github.com/Jeffail/leaps.git",
       :tag      => "v0.9.0",
       :revision => "89d8ab9e9130238e56a0df283edbcd1115ec9225"
+  license "MIT"
 
   bottle do
     cellar :any_skip_relocation
@@ -28,7 +29,7 @@ class Leaps < Formula
   end
 
   test do
-    port = ":8080"
+    port = ":#{free_port}"
 
     # Start the server in a fork
     leaps_pid = fork do

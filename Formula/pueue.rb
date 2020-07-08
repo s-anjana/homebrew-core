@@ -1,26 +1,28 @@
 class Pueue < Formula
   desc "Command-line tool for managing long-running shell commands"
   homepage "https://github.com/Nukesor/pueue"
-  url "https://github.com/Nukesor/pueue/archive/v0.1.6.tar.gz"
-  sha256 "6b11643497cedfa7517d1c041951be907f6e138e8efc339cd36309943995b8f1"
+  url "https://github.com/Nukesor/pueue/archive/v0.6.1.tar.gz"
+  sha256 "fa9691ff7441bee19eab2bf15238a1c014059968dcc26cc394772061f1000122"
+  license "MIT"
   head "https://github.com/Nukesor/pueue.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "ba1a92b9e140d929233dad0f10a5a2687fb022967017ad78847588ed9d377ed0" => :catalina
-    sha256 "6c3f3b24e1d6a36e4cdb79e045f6662d83f5961f30b21620cfa8c704bf78b43a" => :mojave
-    sha256 "387038f36ce71a0f3fdb4fe15192db99b3be770c939623566dd85180d2ee4aed" => :high_sierra
+    sha256 "801759298072f94496653cc498c1513ede1d0574d2d9bd81bcb46f331c257839" => :catalina
+    sha256 "de5ecda424a1662b9c2b5fb9408e4979c447fedc0f9adf5aa5b9636e19c24f36" => :mojave
+    sha256 "e0a63dc6a83558ce31105c7c74356b224437a00f1b7ba2759e72780a6d20477d" => :high_sierra
   end
 
   depends_on "rust" => :build
 
   def install
-    system "cargo", "install", "--locked", "--root", prefix, "--path", "."
+    system "cargo", "install", *std_cargo_args
 
-    prefix.install_metafiles
-
+    system "./build_completions.sh"
     bash_completion.install "utils/completions/pueue.bash" => "pueue"
     fish_completion.install "utils/completions/pueue.fish" => "pueue.fish"
+
+    prefix.install_metafiles
   end
 
   plist_options :manual => "pueued"

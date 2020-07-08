@@ -1,8 +1,8 @@
 class Mill < Formula
   desc "Scala build tool"
   homepage "https://www.lihaoyi.com/mill/"
-  url "https://github.com/lihaoyi/mill/releases/download/0.6.1/0.6.1"
-  sha256 "9c5900c6c5a5a58e49b122c86ef4c400080f77079b235c61e7b457d85bc98aae"
+  url "https://github.com/lihaoyi/mill/releases/download/0.7.4/0.7.4"
+  sha256 "a5c63964935d84e93770c93f082d88ee38b0791d212cd0d23dbee9e2b10794fd"
 
   bottle :unneeded
 

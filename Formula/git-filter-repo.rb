@@ -1,8 +1,10 @@
 class GitFilterRepo < Formula
+  include Language::Python::Shebang
+
   desc "Quickly rewrite git repository history"
   homepage "https://github.com/newren/git-filter-repo"
-  url "https://github.com/newren/git-filter-repo/releases/download/v2.25.0/git-filter-repo-2.25.0.tar.xz"
-  sha256 "ea8cdb7dca68111e819d141fc4d302b811c1e5362c12de7403882ba9908be29c"
+  url "https://github.com/newren/git-filter-repo/releases/download/v2.27.1/git-filter-repo-2.27.1.tar.xz"
+  sha256 "48d0bf96c1b0fdf56bf25bf1cef488f4ec1e872ebf0dddc27fd4f91c8615231f"
 
   bottle :unneeded
 
@@ -14,7 +16,7 @@ class GitFilterRepo < Formula
   depends_on "python@3.8"
 
   def install
-    Language::Python.rewrite_python_shebang(Formula["python@3.8"].opt_bin/"python3")
+    rewrite_shebang detected_python_shebang, "git-filter-repo"
     bin.install "git-filter-repo"
     man1.install "Documentation/man1/git-filter-repo.1"
   end

@@ -1,15 +1,15 @@
 class Openimageio < Formula
   desc "Library for reading, processing and writing images"
   homepage "https://openimageio.org/"
-  url "https://github.com/OpenImageIO/oiio/archive/Release-2.1.11.2.tar.gz"
-  version "2.1.11"
-  sha256 "0982f46a6a3107045c06ca825cc1637e023d7e7f16075523a85b10de9acedf55"
+  url "https://github.com/OpenImageIO/oiio/archive/Release-2.1.17.0.tar.gz"
+  version "2.1.17"
+  sha256 "6f20536226f1da4fbf0d522815de47eef60a443f9b67a15705b96c34cc8921a7"
   head "https://github.com/OpenImageIO/oiio.git"
 
   bottle do
-    sha256 "5862ca53604ed40fc670cc003361c29a9a7e2338f0ad6309573a395d2458761d" => :catalina
-    sha256 "09d75bd3f959c2f948921542249892dac3b47df4612e397729611aee6301fd45" => :mojave
-    sha256 "b903ed19e0cf028704d11f1ce99856d37c48fc1366c45d8efbb148a30164ff9e" => :high_sierra
+    sha256 "8d14eddacdafeb822d0b8cbfaf9c74fb82742834017ca1ad8f8eff61792426d3" => :catalina
+    sha256 "f64239c6986e07b4a16eb1e38da4228fedf460c83b5d90a147368589768f7612" => :mojave
+    sha256 "689597d81d0bed355b92881316ff69cfb49320360f3e6627c235e4e74330c90d" => :high_sierra
   end
 
   depends_on "cmake" => :build
@@ -21,12 +21,13 @@ class Openimageio < Formula
   depends_on "giflib"
   depends_on "ilmbase"
   depends_on "jpeg"
+  depends_on "libheif"
   depends_on "libpng"
   depends_on "libraw"
   depends_on "libtiff"
   depends_on "opencolorio"
   depends_on "openexr"
-  depends_on "python"
+  depends_on "python@3.8"
   depends_on "webp"
 
   def install
@@ -44,14 +45,14 @@ class Openimageio < Formula
     ]
 
     # CMake picks up the system's python dylib, even if we have a brewed one.
-    py3ver = Language::Python.major_minor_version "python3"
-    py3prefix = Formula["python3"].opt_frameworks/"Python.framework/Versions/#{py3ver}"
+    py3ver = Language::Python.major_minor_version Formula["python@3.8"].opt_bin/"python3"
+    py3prefix = Formula["python@3.8"].opt_frameworks/"Python.framework/Versions/#{py3ver}"
 
     ENV["PYTHONPATH"] = lib/"python#{py3ver}/site-packages"
 
     args << "-DPYTHON_EXECUTABLE=#{py3prefix}/bin/python3"
     args << "-DPYTHON_LIBRARY=#{py3prefix}/lib/libpython#{py3ver}.dylib"
-    args << "-DPYTHON_INCLUDE_DIR=#{py3prefix}/include/python#{py3ver}m"
+    args << "-DPYTHON_INCLUDE_DIR=#{py3prefix}/include/python#{py3ver}"
 
     # CMake picks up boost-python instead of boost-python3
     args << "-DBOOST_ROOT=#{Formula["boost"].opt_prefix}"
@@ -79,6 +80,6 @@ class Openimageio < Formula
       import OpenImageIO
       print(OpenImageIO.VERSION_STRING)
     EOS
-    assert_match version.to_s, pipe_output("python3", output, 0)
+    assert_match version.to_s, pipe_output(Formula["python@3.8"].opt_bin/"python3", output, 0)
   end
 end

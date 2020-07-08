@@ -1,13 +1,14 @@
 class Monetdb < Formula
   desc "Column-store database"
   homepage "https://www.monetdb.org/"
-  url "https://www.monetdb.org/downloads/sources/Nov2019-SP3/MonetDB-11.35.19.tar.xz"
-  sha256 "eaca588936532f189e6d3d0be4079f195ee5be20e2f8c5738566b75aa86c8f75"
+  url "https://www.monetdb.org/downloads/sources/Jun2020/MonetDB-11.37.7.tar.xz"
+  sha256 "8496c9cb3a5e8d5493060f173ad92f773e804d6ba03b0e0f6fa607b57642b447"
 
   bottle do
-    sha256 "cae9fb599fc184c773d9b14f25f2e914ea41693562f1ec394e8f764fce425010" => :catalina
-    sha256 "6468a9874db95f65c7f607281c9494c5a184fe8d79382e9c4f4f6b4bce353e4a" => :mojave
-    sha256 "007f74508914b133980a4eef667ef15e12d6be2245ea028f217431da86ebd5df" => :high_sierra
+    rebuild 1
+    sha256 "a3c41056e62e92756366845ea2c8edd548a55a5b29887f310e668ab6cd749ffd" => :catalina
+    sha256 "8d50a624839fff2dea6424b18549e0893e028b0233b64ee18a3bbdfe5523aca2" => :mojave
+    sha256 "d5d9aba84c98e71d848532723c74fbdfb616306d39ba696f89001e88b6837b3e" => :high_sierra
   end
 
   head do
@@ -42,6 +43,8 @@ class Monetdb < Formula
   end
 
   test do
-    assert_match "Usage", shell_output("#{bin}/mclient --help 2>&1")
+    # assert_match "Usage", shell_output("#{bin}/mclient --help 2>&1")
+    system("#{bin}/monetdbd", "create", "#{testpath}/dbfarm")
+    assert_predicate testpath/"dbfarm", :exist?
   end
 end

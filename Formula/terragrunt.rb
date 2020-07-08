@@ -1,28 +1,22 @@
 class Terragrunt < Formula
   desc "Thin wrapper for Terraform e.g. for locking state"
   homepage "https://github.com/gruntwork-io/terragrunt"
-  url "https://github.com/gruntwork-io/terragrunt.git",
-    :tag      => "v0.23.2",
-    :revision => "f774248751ec2e46d09823ab3c6192a35c567b27"
+  url "https://github.com/gruntwork-io/terragrunt/archive/v0.23.31.tar.gz"
+  sha256 "7bb9859fd968220bcae1908079448834a789fca03d644d405a61441cd4a655a2"
+  license "MIT"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "a29313b931f7218f64562ecc2c1c31afcc99d8f34ee30e69654b5e721d3676b6" => :catalina
-    sha256 "9852c0d378bd2a71e20c0c86dd84a9c1ad121cd9917bc555145248260e2a9a8e" => :mojave
-    sha256 "c09a3c8827b00bd9e4ebc4e98c3078446e258a77b4c11529492f383ad02aa577" => :high_sierra
+    sha256 "c74b848ce18f0e9213060a65ce821780253bb1b5243347ef54a0e1be5340c417" => :catalina
+    sha256 "07f2f7c28801f415bc2fa0eb4c12f822c4c54cb43bae78628fd8c8db372717d5" => :mojave
+    sha256 "96abd6473924b65e834d33412f2d3087f994f9a368367e79a75b47acec02475c" => :high_sierra
   end
 
-  depends_on "dep" => :build
   depends_on "go" => :build
   depends_on "terraform"
 
   def install
-    ENV["GOPATH"] = buildpath
-    (buildpath/"src/github.com/gruntwork-io/terragrunt").install buildpath.children
-    cd "src/github.com/gruntwork-io/terragrunt" do
-      system "dep", "ensure", "-vendor-only"
-      system "go", "build", "-o", bin/"terragrunt", "-ldflags", "-X main.VERSION=v#{version}"
-    end
+    system "go", "build", "-ldflags", "-X main.VERSION=v#{version}", *std_go_args
   end
 
   test do

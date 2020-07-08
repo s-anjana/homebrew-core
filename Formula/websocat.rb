@@ -3,6 +3,7 @@ class Websocat < Formula
   homepage "https://github.com/vi/websocat"
   url "https://github.com/vi/websocat/archive/v1.5.0.tar.gz"
   sha256 "3ffdb25e937095d95b564eafd805cb7ca141570f95c1296b6dd336d4d016445f"
+  license "MIT"
 
   bottle do
     cellar :any_skip_relocation
@@ -15,10 +16,12 @@ class Websocat < Formula
   depends_on "pkg-config" => :build
   depends_on "rust" => :build
 
+  on_linux do
+    depends_on "openssl@1.1"
+  end
+
   def install
-    system "cargo", "install", "--locked", "--root", prefix,
-                               "--path", ".",
-                               "--features", "ssl"
+    system "cargo", "install", "--features", "ssl", *std_cargo_args
   end
 
   test do

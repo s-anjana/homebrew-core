@@ -4,6 +4,7 @@ class Mpfr < Formula
   url "https://ftp.gnu.org/gnu/mpfr/mpfr-4.0.2.tar.xz"
   mirror "https://ftpmirror.gnu.org/mpfr/mpfr-4.0.2.tar.xz"
   sha256 "1d3be708604eae0e42d578ba93b390c2a145f17743a744d8f3f8c2ad5855a38a"
+  license "GPL-3.0"
 
   bottle do
     cellar :any
@@ -16,6 +17,10 @@ class Mpfr < Formula
   depends_on "gmp"
 
   def install
+    # Work around macOS Catalina / Xcode 11 code generation bug
+    # (test failure t-toom53, due to wrong code in mpn/toom53_mul.o)
+    ENV.append_to_cflags "-fno-stack-check"
+
     system "./configure", "--disable-dependency-tracking", "--prefix=#{prefix}",
                           "--disable-silent-rules"
     system "make"

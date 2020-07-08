@@ -4,6 +4,7 @@ class Binutils < Formula
   url "https://ftp.gnu.org/gnu/binutils/binutils-2.34.tar.xz"
   mirror "https://ftpmirror.gnu.org/binutils/binutils-2.34.tar.xz"
   sha256 "f00b0e8803dc9bab1e2165bd568528135be734df3fabf8d0161828cd56028952"
+  license "GPL-2.0"
 
   bottle do
     sha256 "1e21593a927df65e405f9d3bdc8f86fe83b1236c5c945641a2de775c99327953" => :catalina
@@ -11,8 +12,7 @@ class Binutils < Formula
     sha256 "87bda0c909a5bd2043d35b073f2268cac7aed074a89d903973e4909d68dfdf46" => :high_sierra
   end
 
-  keg_only :provided_by_macos,
-           "because Apple provides the same tools and binutils is poorly supported on macOS"
+  keg_only :shadowed_by_macos, "Apple's CLT provides the same tools"
 
   uses_from_macos "zlib"
 

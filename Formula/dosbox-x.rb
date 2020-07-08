@@ -1,20 +1,22 @@
 class DosboxX < Formula
   desc "DOSBox with accurate emulation and wide testing"
   homepage "https://dosbox-x.com/"
-  url "https://github.com/joncampbell123/dosbox-x/archive/dosbox-x-v0.83.0.tar.gz"
-  sha256 "cc5beafa32bde866b5f54b46229feb743abee7dbd84becc9735709efb8189283"
+  url "https://github.com/joncampbell123/dosbox-x/archive/dosbox-x-v0.83.2.tar.gz"
+  sha256 "87cfdf515b6c5a71afb3f5b1960d5cd323a0cce5643094713db3cf2ccb82b4bc"
+  license "GPL-2.0"
   version_scheme 1
   head "https://github.com/joncampbell123/dosbox-x.git"
 
   bottle do
     cellar :any
-    sha256 "50c4f1eef202f3911273db2e03c29dc5181e2c5202791d82c4ce24e0d8b90e00" => :catalina
-    sha256 "dda9ef26dac2c2dc2d5f4b1eef727ffedde93d7b4aaac31fed48c022c4601e5e" => :mojave
-    sha256 "c343baffac58d607f92ea068316f134a82d3849b50b475c6a9fd59caad5eb1c0" => :high_sierra
+    sha256 "188b8c6fea8b9b0a48f9954b5880b5930e5f5a60676ed00b6e737299af0a247e" => :catalina
+    sha256 "a79924c841eb8e32af442c35f2a473261cdbccd69cfed0a0a43cda5871aa76e3" => :mojave
+    sha256 "fcd0e2800565054884857b256096cfd650fb64b7a004bfbc60a5e934f1daa8af" => :high_sierra
   end
 
   depends_on "autoconf" => :build
   depends_on "automake" => :build
+  depends_on "pkg-config" => :build
   depends_on "fluid-synth"
   depends_on :macos => :high_sierra # needs futimens
 
@@ -31,6 +33,6 @@ class DosboxX < Formula
   end
 
   test do
-    assert_match /DOSBox version #{version}/, shell_output("#{bin}/dosbox-x -version 2>&1", 1)
+    assert_match /DOSBox-X version #{version}/, shell_output("#{bin}/dosbox-x -version 2>&1", 1)
   end
 end

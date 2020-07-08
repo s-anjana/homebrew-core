@@ -3,6 +3,7 @@ class AngleGrinder < Formula
   homepage "https://github.com/rcoh/angle-grinder"
   url "https://github.com/rcoh/angle-grinder/archive/v0.13.0.tar.gz"
   sha256 "b257b9869f5350bc75754ecdd883341a7ede74bde05dd1e934dfd3b40d962d7c"
+  license "MIT"
   revision 1
 
   bottle do
@@ -14,8 +15,13 @@ class AngleGrinder < Formula
 
   depends_on "rust" => :build
 
+  on_linux do
+    depends_on "pkg-config" => :build
+    depends_on "openssl@1.1"
+  end
+
   def install
-    system "cargo", "install", "--locked", "--root", prefix, "--path", "."
+    system "cargo", "install", *std_cargo_args
   end
 
   test do

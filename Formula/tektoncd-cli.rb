@@ -1,15 +1,15 @@
 class TektoncdCli < Formula
   desc "CLI for interacting with TektonCD"
   homepage "https://github.com/tektoncd/cli"
-  url "https://github.com/tektoncd/cli/archive/v0.8.0.tar.gz"
-
-  sha256 "7f3179905a3bf725e34a85442ef30880c350659525e750a9112f3fefa23123b7"
+  url "https://github.com/tektoncd/cli/archive/v0.10.0.tar.gz"
+  sha256 "d85663f160c2902789194502c036953a856f57d7c0481c23ab12e719a7a21d42"
+  license "Apache-2.0"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "957f2b7fca0ca4dd9771424414d487bf17a99cfec72287ae8ea8f890e7436902" => :catalina
-    sha256 "ae2e0d06f6a7469e8203a0116aa134d2cf6d5061acb7cbda4c4d42fa377a2201" => :mojave
-    sha256 "a4a0f3b056562799e295f4571058f9139af9783fb7d3fb38a1ae93b912d983ee" => :high_sierra
+    sha256 "535ec002c95d1fd0c0ee84828d3844ea9845493e55e099941366d004bdfa6b55" => :catalina
+    sha256 "c56a08ee17e686bc22a17b9982d5879848660e9472464dfdae3bb7dd0d5b55f3" => :mojave
+    sha256 "f19731f06d92e88fe464b72b14457b85230c926e20e5a428e8fcf2500e357fd5" => :high_sierra
   end
 
   depends_on "go" => :build
@@ -18,9 +18,9 @@ class TektoncdCli < Formula
     system "make", "bin/tkn"
 
     bin.install "bin/tkn" => "tkn"
-    output = Utils.popen_read("SHELL=bash #{bin}/tkn completion bash")
+    output = Utils.safe_popen_read({ "SHELL" => "bash" }, bin/"tkn", "completion", "bash")
     (bash_completion/"tkn").write output
-    output = Utils.popen_read("SHELL=zsh #{bin}/tkn completion zsh")
+    output = Utils.safe_popen_read({ "SHELL" => "zsh" }, bin/"tkn", "completion", "zsh")
     (zsh_completion/"_tkn").write output
     prefix.install_metafiles
   end

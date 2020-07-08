@@ -17,6 +17,8 @@ class Acmetool < Formula
 
   depends_on "go" => :build
 
+  uses_from_macos "libpcap"
+
   go_resource "github.com/alecthomas/template" do
     url "https://github.com/alecthomas/template.git",
         :revision => "a0175ee3bccc567396460bf5acd36800cb10c49c"
@@ -165,17 +167,17 @@ class Acmetool < Formula
     Language::Go.stage_deps resources, buildpath/"src"
 
     cd "cmd/acmetool" do
-      # https://github.com/hlandau/acme/blob/master/_doc/PACKAGING-PATHS.md
+      # https://github.com/hlandau/acme/blob/HEAD/_doc/PACKAGING-PATHS.md
       ldflags = %W[
         -X github.com/hlandau/acme/storage.RecommendedPath=#{var}/lib/acmetool
         -X github.com/hlandau/acme/hooks.DefaultPath=#{lib}/hooks
         -X github.com/hlandau/acme/responder.StandardWebrootPath=#{var}/run/acmetool/acme-challenge
-        #{Utils.popen_read("#{buildpath}/src/github.com/hlandau/buildinfo/gen")}
+        #{Utils.safe_popen_read("#{buildpath}/src/github.com/hlandau/buildinfo/gen")}
       ]
       system "go", "build", "-o", bin/"acmetool", "-ldflags", ldflags.join(" ")
     end
 
-    (man8/"acmetool.8").write Utils.popen_read(bin/"acmetool", "--help-man")
+    (man8/"acmetool.8").write Utils.safe_popen_read(bin/"acmetool", "--help-man")
 
     doc.install Dir["_doc/*"]
   end

@@ -1,15 +1,16 @@
 class Rke < Formula
   desc "Rancher Kubernetes Engine, a Kubernetes installer that works everywhere"
-  homepage "https://rancher.com/docs/rke/v0.1.x/en/"
+  homepage "https://rancher.com/docs/rke/latest/en/"
   url "https://github.com/rancher/rke.git",
-      :tag      => "v1.0.4",
-      :revision => "9fa5ca6cdb1b5f82ae967d4be4a77e253ed63d8b"
+      :tag      => "v1.1.3",
+      :revision => "b3082ecb934e5761de9846d336b6a77350169368"
+  license "Apache-2.0"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "6050f68a0a81d7c8482559a5f20d62f2237becf53ae66339cf95d65137cfb50c" => :catalina
-    sha256 "5989d6481016bbf7dce85ae573bab28cb3cfcd8b588b46c2b8689c130c8d8392" => :mojave
-    sha256 "21bd27d09b5a1b54ecd612d8f075a01a4ff0140b82b681f99c55ac39e19f2ad6" => :high_sierra
+    sha256 "9e32789bb442855f6012aa4b96a3d67ee315cdf0b8b851ceaa59a955f372e9ba" => :catalina
+    sha256 "267e5bee1bc54be1c0f41336dac4b59f309fcf6cce836e0308c6c775eb4530eb" => :mojave
+    sha256 "f98a5dbb85122f5dc8f0e33a377359b323b36447f9976eed94da0e0998f7a057" => :high_sierra
   end
 
   depends_on "go" => :build

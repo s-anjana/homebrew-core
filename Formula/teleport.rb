@@ -1,24 +1,30 @@
 class Teleport < Formula
   desc "Modern SSH server for teams managing distributed infrastructure"
   homepage "https://gravitational.com/teleport"
-  url "https://github.com/gravitational/teleport/archive/v4.2.5.tar.gz"
-  sha256 "816ae3d28ffd007d7307c3f0f305a6d345db2cc0fb23c906c1fa6b8909f39ac4"
+  url "https://github.com/gravitational/teleport/archive/v4.2.11.tar.gz"
+  sha256 "e0c8f0123fd2c87fccd5464abc1079a82f0097999efeed32059a01f6fab19616"
+  license "Apache-2.0"
   head "https://github.com/gravitational/teleport.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "58d60d846c7a78d80808f8f270a4934580a68cd5e738dd50525064febbc264c4" => :catalina
-    sha256 "e3e17c265690515fd2a4e66f537d70cb098168d8ea4b9b848864aa524734d1a8" => :mojave
-    sha256 "96e37bc9494c664b9bade277e675779ef58823784aae454e9b5bcdd8d919b48f" => :high_sierra
+    sha256 "494b370c875f70c96850b7ca9cce61e123ea99f505d3ffa4727733662bb67af1" => :catalina
+    sha256 "3dee689ea167e7b0b90d9af37464165ec65d9f80bf16e3961f76828545d52b2c" => :mojave
+    sha256 "cf63c1ffaaccfde7c732aab770c328bc925360b0ff4a24cba7200f8cfb440ebb" => :high_sierra
   end
 
   depends_on "go" => :build
 
+  uses_from_macos "curl" => :test
+  uses_from_macos "zip"
+
+  on_linux do
+    depends_on "netcat" => :test
+  end
+
   conflicts_with "etsh", :because => "both install `tsh` binaries"
 
   def install
-    ENV["GOOS"] = "darwin"
-    ENV["GOARCH"] = "amd64"
     ENV["GOPATH"] = buildpath
     ENV["GOROOT"] = Formula["go"].opt_libexec
 
@@ -26,7 +32,6 @@ class Teleport < Formula
     cd "src/github.com/gravitational/teleport" do
       ENV.deparallelize { system "make", "full" }
       bin.install Dir["build/*"]
-      prefix.install_metafiles
     end
   end
 

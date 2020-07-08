@@ -1,15 +1,16 @@
 class Kepubify < Formula
   desc "Convert ebooks from epub to kepub"
   homepage "https://pgaskin.net/kepubify/"
-  url "https://github.com/geek1011/kepubify/archive/v3.1.0.tar.gz"
-  sha256 "11b995d95219c2d6ac933d365d90e40d9f1ac79bcb9af619bb0128c6d64a6ad9"
+  url "https://github.com/geek1011/kepubify/archive/v3.1.3.tar.gz"
+  sha256 "f178c46b08a6211ed353c2cf625918d582dafce2b76349a0b4c0181c8ff9622b"
+  license "MIT"
   head "https://github.com/geek1011/kepubify.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "cc3fd81c4660bcddf8bf4c01da82bcb9c6e0c2424c0c3f849c31907f206a25a9" => :catalina
-    sha256 "454818f988814c6c9e2933fa011d8813d35ecb4ab7bb1a62620a7c13a19f985d" => :mojave
-    sha256 "5d525a149e3759d7860681000f0c7f5cef2bb5baca3025a27d9d5d28b8752c47" => :high_sierra
+    sha256 "2d723073619c7c2fd4000031f8e62aa870f794117bd98532848077609a8a98e2" => :catalina
+    sha256 "ecc1280cfd43109a6f7de135d1dc2997476c78b4736323ae29724433762547b2" => :mojave
+    sha256 "d08879854f7231ec647220e05df13f33f5b58865243a0254e318dfdda761db6f" => :high_sierra
   end
 
   depends_on "go" => :build
@@ -17,16 +18,15 @@ class Kepubify < Formula
   def install
     ENV["GOPATH"] = HOMEBREW_CACHE/"go_cache"
 
-    ldflags = "-s -w -X main.version=#{version}"
-
-    system "go", "build", "-o", bin/"kepubify",
-                 "-ldflags", ldflags
-
-    system "go", "build", "-o", bin/"covergen",
-                 "-ldflags", ldflags, "./covergen"
-
-    system "go", "build", "-o", bin/"seriesmeta",
-                 "-ldflags", ldflags, "./seriesmeta"
+    %w[
+      kepubify
+      covergen
+      seriesmeta
+    ].each do |p|
+      system "go", "build", "-o", bin/p,
+                   "-ldflags", "-s -w -X main.version=#{version}",
+                   "./cmd/#{p}"
+    end
 
     pkgshare.install "kepub/test.epub"
   end

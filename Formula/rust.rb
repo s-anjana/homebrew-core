@@ -1,23 +1,25 @@
 class Rust < Formula
   desc "Safe, concurrent, practical language"
   homepage "https://www.rust-lang.org/"
+  revision 1
 
   stable do
-    url "https://static.rust-lang.org/dist/rustc-1.41.1-src.tar.gz"
-    sha256 "38c93d016e6d3e083aa15e8f65511d3b4983072c0218a529f5ee94dd1de84573"
+    url "https://static.rust-lang.org/dist/rustc-1.44.1-src.tar.gz"
+    sha256 "7e2e64cb298dd5d5aea52eafe943ba0458fa82f2987fdcda1ff6f537b6f88473"
 
     resource "cargo" do
       url "https://github.com/rust-lang/cargo.git",
-          :tag      => "0.42.0",
-          :revision => "626f0f40efd32e6b3dbade50cd53fdfaa08446ba"
+          :tag      => "0.45.0",
+          :revision => "05d080faa4f2bc1e389ea7c4fd8f30ed2b733a7f"
     end
   end
 
   bottle do
     cellar :any
-    sha256 "cb6f748139b5a6b36cb859840183bbe295734d11cdfa4bf91f2f4b213aa706cf" => :catalina
-    sha256 "8e02732d6b8337d03422c206c8644975ae3e31caa41686c1e298494d0e45ccc2" => :mojave
-    sha256 "0b7a0246cbb9364eae54df7e182bcfbb35542c3feb5f3c166ba1535ffcf58432" => :high_sierra
+    rebuild 1
+    sha256 "5128f7d93695a04ba887284a8d6061202031524251053371b406f94d29738758" => :catalina
+    sha256 "4679c3c77c502d67097ec602860dae400c64ea90e6064a45cd4444f27971eabb" => :mojave
+    sha256 "0a2c02fe10827d361d888532adf4471de7df37edd509bd59c710358cb4e32494" => :high_sierra
   end
 
   head do
@@ -34,14 +36,13 @@ class Rust < Formula
   depends_on "openssl@1.1"
   depends_on "pkg-config"
 
-  uses_from_macos "binutils"
   uses_from_macos "curl"
   uses_from_macos "zlib"
 
   resource "cargobootstrap" do
     # From https://github.com/rust-lang/rust/blob/#{version}/src/stage0.txt
-    url "https://static.rust-lang.org/dist/2019-12-19/cargo-0.41.0-x86_64-apple-darwin.tar.gz"
-    sha256 "1ef77a6be5e697bb7dde40854651fc67e91f119d5a9ddf747a25e30c1179fbe1"
+    url "https://static.rust-lang.org/dist/2020-05-07/cargo-0.44.0-x86_64-apple-darwin.tar.gz"
+    sha256 "1071c520204a9e8fe4dd0de66a07a083f06abba16ac88f1df72231328a6395e6"
   end
 
   def install
@@ -80,7 +81,11 @@ class Rust < Formula
 
     resource("cargo").stage do
       ENV["RUSTC"] = bin/"rustc"
-      system "cargo", "install", "--root", prefix, "--path", ".", "--features", "curl-sys/force-system-lib-on-osx"
+      args = %W[--root #{prefix} --path . --features curl-sys/force-system-lib-on-osx]
+      system "cargo", "install", *args
+      man1.install Dir["src/etc/man/*.1"]
+      bash_completion.install "src/etc/cargo.bashcomp.sh"
+      zsh_completion.install "src/etc/_cargo"
     end
 
     rm_rf prefix/"lib/rustlib/uninstall.sh"

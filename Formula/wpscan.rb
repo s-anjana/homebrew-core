@@ -1,23 +1,30 @@
 class Wpscan < Formula
   desc "Black box WordPress vulnerability scanner"
   homepage "https://wpscan.org"
-  url "https://github.com/wpscanteam/wpscan/archive/v3.7.11.tar.gz"
-  sha256 "f493e427d88b8f24d3f8187fead34ffe5b01ce67af6d42bc9c538a5c6781a33c"
+  url "https://github.com/wpscanteam/wpscan/archive/v3.8.2.tar.gz"
+  sha256 "5aac100b95745bdb45031b6383b74453b209b965486197d8026a83a662412c3c"
   head "https://github.com/wpscanteam/wpscan.git"
 
   bottle do
     cellar :any
-    sha256 "b19367322d6891e804d1cc721ad63d0df4b2927505949fa84d0f83178bf6d9cc" => :catalina
-    sha256 "3a355cb31c324877da3e2c640a814a9188a00d46991373d4c9cf853186acd6ee" => :mojave
-    sha256 "b3f8f08c232218b9a0c656acfe696fa688e31a326454cd9b0daf4eb96d37afa0" => :high_sierra
+    sha256 "202f067c8019102a570f95ac29d60a5010498cedf047e3fb4cd7aab4636f0959" => :catalina
+    sha256 "d5cff4f5d3649adab8cd5195266f2e0634d2c8993714f7e59f9d8d8d0bc53dc2" => :mojave
+    sha256 "ce604ef3517c146a2922cb3d75ec18d5e740262e5c7b178565e25c07bb410f36" => :high_sierra
   end
 
+  depends_on "pkg-config" => :build
   depends_on "ruby"
 
   uses_from_macos "curl"
   uses_from_macos "unzip"
   uses_from_macos "xz" # for liblxma
   uses_from_macos "zlib"
+
+  if MacOS.version < :catalina
+    depends_on "libffi"
+  else
+    uses_from_macos "libffi"
+  end
 
   # Fixes the --no-update commandline option
   # https://github.com/wpscanteam/wpscan/pull/1455

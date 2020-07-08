@@ -1,14 +1,15 @@
 class Lxc < Formula
   desc "CLI client for interacting with LXD"
   homepage "https://linuxcontainers.org"
-  url "https://linuxcontainers.org/downloads/lxd/lxd-3.22.tar.gz"
-  sha256 "1692cec36c836b101384830abc7753b1acdd46df0cbea5d5b41633cfa4eac0c8"
+  url "https://linuxcontainers.org/downloads/lxd/lxd-4.3.tar.gz"
+  sha256 "b6891ee6086a2d26409385fcd50d627e6a72e0af17f88c5693c1e100ed9dca1f"
+  license "Apache-2.0"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "df4afb1ff0f1c7e3fabffb20c4e2e9689b0c38781c9089e7b600f15cf0d1e026" => :catalina
-    sha256 "488f7f61bd23a50cda921323df8fff73ba4396a10c55d331f52dc20cffdcd49b" => :mojave
-    sha256 "824959ccdc2a838326d712974f0cb84d5c6a8bbe34e80d962e9d7a5593c08a42" => :high_sierra
+    sha256 "5f2595ccdaad48ac032a0ae9d187ba74b7e53dc6d58614c9d7fc235b5685a247" => :catalina
+    sha256 "4f6ff1af48947a98587f341f31b8cb2fc8d948a11b81c113eea0fe0b2d665345" => :mojave
+    sha256 "1706400532ce10e71cac18d345cd75e42b2f05cab6bbfdf43ade9b9825970626" => :high_sierra
   end
 
   depends_on "go" => :build

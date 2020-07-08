@@ -1,14 +1,15 @@
 class AliyunCli < Formula
   desc "Universal Command-Line Interface for Alibaba Cloud"
   homepage "https://github.com/aliyun/aliyun-cli"
-  url "https://github.com/aliyun/aliyun-cli/archive/v3.0.37.tar.gz"
-  sha256 "aac6a30b790c3c71fd01e3690cbd0556b4adc0cd91515a2bf322b30257f54903"
+  url "https://github.com/aliyun/aliyun-cli/archive/v3.0.50.tar.gz"
+  sha256 "e68aaf89cfedd4ce4e496d59e4ac399ae587c476d6c5f4b548423140f25bd282"
+  license "Apache-2.0"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "9d829dc9bdd6b9ef46b43a6bac7e2de76acd710e520ef5161080472875de1e8b" => :catalina
-    sha256 "99958696c7e48e7a09768823e7d639447fe31e973e88bfd4599e0f65b8cfbafc" => :mojave
-    sha256 "3353d27a5f6bcf0ee868563e89c3747953885af7fb2aa0e23bb2c6a1c2dd5f45" => :high_sierra
+    sha256 "073dfd3d9939561b6d8d99c8ee1ed5d63601a6a1e89197e08d95d6a04714a600" => :catalina
+    sha256 "1b172fcddd39aac84e168d53629b502ea4fc550f137a520c732c987209a15bf7" => :mojave
+    sha256 "26132757cd88c4a96cb724173351b8025b7647b6299de323db073fc67230d917" => :high_sierra
   end
 
   depends_on "go" => :build

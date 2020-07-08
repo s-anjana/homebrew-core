@@ -3,6 +3,7 @@ class AppstreamGlib < Formula
   homepage "https://github.com/hughsie/appstream-glib"
   url "https://github.com/hughsie/appstream-glib/archive/appstream_glib_0_7_17.tar.gz"
   sha256 "cb612c9e634275e574fa639737cf63711358cd10b9d0d377f70025653fefdd16"
+  license "LGPL-2.1"
 
   bottle do
     cellar :any
@@ -32,7 +33,7 @@ class AppstreamGlib < Formula
     ENV["XML_CATALOG_FILES"] = "#{etc}/xml/catalog"
 
     mkdir "build" do
-      system "meson", "--prefix=#{prefix}", "-Dbuilder=false", "-Drpm=false", "-Ddep11=false", "-Dstemmer=false", ".."
+      system "meson", *std_meson_args, "-Dbuilder=false", "-Drpm=false", "-Ddep11=false", "-Dstemmer=false", ".."
       system "ninja", "-v"
       system "ninja", "install", "-v"
     end

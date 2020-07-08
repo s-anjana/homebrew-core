@@ -1,8 +1,8 @@
 class Metabase < Formula
   desc "Business intelligence report server"
   homepage "https://www.metabase.com/"
-  url "https://downloads.metabase.com/v0.34.3/metabase.jar"
-  sha256 "cf8bd7fa27bae5337a80a22b65cabdd687a3514f636135052b66fd947fc3724f"
+  url "https://downloads.metabase.com/v0.35.4/metabase.jar"
+  sha256 "a839b608d19701047aac6fcf2d61dc74d9734cf9488d69c9540ec148daccefd5"
 
   head do
     url "https://github.com/metabase/metabase.git"

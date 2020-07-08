@@ -1,14 +1,14 @@
 class Modules < Formula
   desc "Dynamic modification of a user's environment via modulefiles"
   homepage "https://modules.sourceforge.io/"
-  url "https://downloads.sourceforge.net/project/modules/Modules/modules-4.4.1/modules-4.4.1.tar.bz2"
-  sha256 "f4dc6b7055897382d6b655506c1a74d9ff33e9831d64082d03acdff4ba8521fa"
+  url "https://downloads.sourceforge.net/project/modules/Modules/modules-4.5.1/modules-4.5.1.tar.bz2"
+  sha256 "8d9829905f79d379c2cf753c7fe6f7be1188853e859f81b44f5116337e8f49d9"
 
   bottle do
     cellar :any
-    sha256 "0c7b11dae0311e6f6f4f97981f01baf80086d1ec1101a045ae834b8410002038" => :catalina
-    sha256 "300b211f01eb7db1ae80bd74f5de3711ac4b856159dacb1de2758ea6f831710f" => :mojave
-    sha256 "86e28621fc7fb9b35fb9b4f82616ec31190ba7bbbb0a096d288ae79cd485c01c" => :high_sierra
+    sha256 "0eff45eac8ca106c0682606a4e20e134dbdf0c76ff9273984a88fc48744a8190" => :catalina
+    sha256 "45dcef5e8a7e67b96b25cae336343eee677a699afff66ea4039742d1d6599d74" => :mojave
+    sha256 "06b3c839f16bda9ebdac25ea1519533994fdb84dd89dfe6de8f56fe685508765" => :high_sierra
   end
 
   def install

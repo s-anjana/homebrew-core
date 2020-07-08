@@ -1,14 +1,15 @@
 class Neomutt < Formula
   desc "E-mail reader with support for Notmuch, NNTP and much more"
   homepage "https://neomutt.org/"
-  url "https://github.com/neomutt/neomutt/archive/20200313.tar.gz"
-  sha256 "b5ff780506a5371f737f32afd694857568e8827b1c391e0aca27c66687019e85"
+  url "https://github.com/neomutt/neomutt/archive/20200626.tar.gz"
+  sha256 "94b2e59667a080cb9d531050c3ad320f9951ba7ba09eb7eda15427899627f89e"
+  license "GPL-2.0"
   head "https://github.com/neomutt/neomutt.git"
 
   bottle do
-    sha256 "982e9139ba41152d115acb263e472e185d62fd2ed82a6e269d3a813f2ae25261" => :catalina
-    sha256 "ad577d51de14b0c7ba4f833f5677940496da6950762597b0d2189f624af898cf" => :mojave
-    sha256 "4f7bae6cff41639f21346b39749aa83f044a76d325295a7ee669b386988dadfc" => :high_sierra
+    sha256 "d1f6edf36d492185a4f8fa35296c9176862641939bef9335d00773c69359b242" => :catalina
+    sha256 "03ca3d480c10bc301cd37b58d88700129d747be4250333b10654280af6602b8b" => :mojave
+    sha256 "d7834ff5bcf0b475d2794e8b83ec16de4e4ba25981afc98a78143b3cd7696e18" => :high_sierra
   end
 
   depends_on "docbook-xsl" => :build
@@ -16,6 +17,7 @@ class Neomutt < Formula
   depends_on "gpgme"
   depends_on "libidn"
   depends_on "lmdb"
+  depends_on "lua"
   depends_on "notmuch"
   depends_on "openssl@1.1"
   depends_on "tokyo-cabinet"
@@ -31,7 +33,9 @@ class Neomutt < Formula
                           "--sasl",
                           "--tokyocabinet",
                           "--with-ssl=#{Formula["openssl@1.1"].opt_prefix}",
-                          "--with-ui=ncurses"
+                          "--with-ui=ncurses",
+                          "--lua",
+                          "--with-lua=#{Formula["lua"].prefix}"
     system "make", "install"
   end
 
